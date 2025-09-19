@@ -153,6 +153,7 @@ void renderLoop()
 
 	initPhysics(true);
 	glutMainLoop();
+	
 }
 
 void RegisterRenderItem(const RenderItem* _item)

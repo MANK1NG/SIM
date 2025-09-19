@@ -3,7 +3,7 @@
 #include <PxPhysicsAPI.h>
 
 #include <vector>
-
+#include "vector3D.h"
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
@@ -29,8 +29,33 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
+RenderItem* ejeXItem;
+RenderItem* ejeYItem;
+RenderItem* ejeZItem;
+RenderItem* centroItem;
 
 
+void crearEjes() {
+	Vector3D ejeX(10.0f, 0.0f, 0.0f); 
+	Vector3D ejeY(0.0f, 10.0f, 0.0f); 
+	Vector3D ejeZ(0.0f, 0.0f, 10.0f);
+	Vector3D centro(0.0f, 0.0f, 0.0f);
+
+	ejeXItem = new RenderItem(CreateShape(PxSphereGeometry(2)),new PxTransform(ejeX.getX(), ejeX.getY(), ejeX.getZ()),Vector4(1, 0, 0, 1));
+	RegisterRenderItem(ejeXItem);
+
+	 ejeYItem = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(ejeY.getX(), ejeY.getY(), ejeY.getZ()), Vector4(0, 1, 0, 1));
+	 RegisterRenderItem(ejeYItem);
+
+	
+	 ejeZItem = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(ejeZ.getX(), ejeZ.getY(), ejeZ.getZ()), Vector4(0, 0, 1, 1));
+	 RegisterRenderItem(ejeZItem);
+
+	 centroItem = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(centro.getX(), centro.getY(), centro.getZ()), Vector4(1, 1, 1, 1));
+
+	RegisterRenderItem(centroItem);
+
+}
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -54,6 +79,12 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+	
+	
+	crearEjes();
+	
+	//sphere12 = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(1, 1, 1), { 1,1,1,1 });
+	//RegisterRenderItem(sphere12);
 	}
 
 
@@ -72,7 +103,13 @@ void stepPhysics(bool interactive, double t)
 // Add custom code to the begining of the function
 void cleanupPhysics(bool interactive)
 {
+
 	PX_UNUSED(interactive);
+	DeregisterRenderItem(centroItem);
+	DeregisterRenderItem(ejeZItem);
+	DeregisterRenderItem(ejeYItem);
+	DeregisterRenderItem(ejeXItem);
+
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
@@ -109,6 +146,8 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
 }
+
+
 
 
 int main(int, const char*const*)
