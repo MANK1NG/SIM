@@ -4,13 +4,14 @@
 class Particle 
 {
 public:
-	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc);
+	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Dampling);
 	~Particle();
 
 	void integrate(double t);
 private:
 	Vector3D vel;
 	Vector3D acc;
+	float damping;
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 

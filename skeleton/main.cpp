@@ -84,7 +84,7 @@ void initPhysics(bool interactive)
 	
 	
 	crearEjes();
-	particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0));
+	particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
 
 	//sphere12 = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(1, 1, 1), { 1,1,1,1 });
 	//RegisterRenderItem(sphere12);
