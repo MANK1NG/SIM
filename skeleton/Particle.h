@@ -1,7 +1,7 @@
 #pragma once
 #include "vector3D.h"
 #include "RenderUtils.hpp"
-class Particle
+class Particle 
 {
 public:
 	Particle(Vector3D Pos, Vector3D Vel);

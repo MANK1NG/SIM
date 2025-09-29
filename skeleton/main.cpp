@@ -7,6 +7,7 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
+#include "Particle.h"
 
 #include <iostream>
 
@@ -32,6 +33,7 @@ ContactReportCallback gContactReportCallback;
 RenderItem* ejeXItem;
 RenderItem* ejeYItem;
 RenderItem* ejeZItem;
+Particle* particula;
 RenderItem* centroItem;
 
 
@@ -82,7 +84,8 @@ void initPhysics(bool interactive)
 	
 	
 	crearEjes();
-	
+	particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0));
+
 	//sphere12 = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(1, 1, 1), { 1,1,1,1 });
 	//RegisterRenderItem(sphere12);
 	}
@@ -97,6 +100,7 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+	particula->integrate(t);
 }
 
 // Function to clean data
@@ -109,7 +113,7 @@ void cleanupPhysics(bool interactive)
 	DeregisterRenderItem(ejeZItem);
 	DeregisterRenderItem(ejeYItem);
 	DeregisterRenderItem(ejeXItem);
-
+	delete particula;
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
