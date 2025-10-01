@@ -57,8 +57,8 @@ public:
 		return Vector3D(x - otro.x, y - otro.y, z - otro.z);
 
 	}
-	inline Vector3D& operator*( float otro) const{
-		return Vector3D(x * otro, y * otro, z * otro);
+	inline Vector3D& operator*( const Vector3D& otro) const{
+		return Vector3D(x * otro.x, y * otro.y, z * otro.z);
 
 	}
 

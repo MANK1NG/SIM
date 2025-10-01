@@ -14,9 +14,9 @@ Particle::~Particle()
 
 void Particle::integrate(double t)
 {
-	vel = vel + acc * t;
+	vel = vel + acc.multEscalar(t) ;
 
-	vel = vel * pow(damping, t);
+	vel = vel.multEscalar( pow(damping, t));
 
 	pose.p.x += vel.getX() * t;
 	pose.p.y += vel.getY() * t;
