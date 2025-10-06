@@ -8,6 +8,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
+#include "Projectile.h"
 
 #include <iostream>
 
@@ -33,8 +34,10 @@ ContactReportCallback gContactReportCallback;
 RenderItem* ejeXItem;
 RenderItem* ejeYItem;
 RenderItem* ejeZItem;
-Particle* particula;
+//Particle* particula;
+//Projectile* proyectil;
 RenderItem* centroItem;
+std::vector<Projectile*> projectiles;
 
 
 void crearEjes() {
@@ -57,6 +60,22 @@ void crearEjes() {
 
 	RegisterRenderItem(centroItem);
 
+}
+
+void disparar()
+{
+	PxVec3 eye = GetCamera()->getEye();
+	PxVec3 dir = GetCamera()->getDir();
+
+	Vector3D pos(eye.x, eye.y, eye.z);
+	Vector3D dirVec(dir.x, dir.y, dir.z);
+
+	Vector3D velSim = dirVec.multEscalar(5.0f); 
+	
+
+	Projectile* p = new Projectile(pos, Vector3D(0, 0, 0), 0.995f, 0.625f, Vector3D(8, 20, 0), velSim, Vector3D(0, -9.8f, 0));
+
+	projectiles.push_back(p);
 }
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -84,8 +103,8 @@ void initPhysics(bool interactive)
 	
 	
 	crearEjes();
-	particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
-
+	//particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
+	
 
 	//IMPORTANTEPARA PRACTICA 1.2 : 
 	// GetCamera()->GetDir(); -> direccion camara
@@ -105,7 +124,10 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	particula->integrate(t);
+	//particula->integrate(t);
+	for (auto p : projectiles) {
+		p->integrate(t);
+	}
 }
 
 // Function to clean data
@@ -118,7 +140,10 @@ void cleanupPhysics(bool interactive)
 	DeregisterRenderItem(ejeZItem);
 	DeregisterRenderItem(ejeYItem);
 	DeregisterRenderItem(ejeXItem);
-	delete particula;
+	for (auto p : projectiles) {
+		delete p; 
+	}
+	//delete particula;
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
@@ -141,6 +166,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
+	case '1': // pelota baloncesto
+		// speedSimulada (m/s), velRealMagnitude (m/s), masaReal (kg)
+		disparar();
+		break;
 	case ' ':
 	{
 		break;

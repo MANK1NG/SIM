@@ -8,12 +8,14 @@ public:
 	~Particle();
 
 	virtual void integrate(double t);
-private:
+
+protected:
 	Vector3D vel;
 	Vector3D acc;
 	float damping;
 	physx::PxTransform pose;
 	RenderItem* renderItem;
+
 
 };
 
