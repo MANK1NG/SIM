@@ -4,16 +4,19 @@
 class Particle 
 {
 public:
-	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Dampling);
+	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Dampling, float lifetime);
 	~Particle();
 
 	virtual void integrate(double t);
+	bool isAlive();
+	physx::PxTransform pose;
 
 protected:
 	Vector3D vel;
 	Vector3D acc;
 	float damping;
-	physx::PxTransform pose;
+	float lifeTime;
+	float time;
 	RenderItem* renderItem;
 
 

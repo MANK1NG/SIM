@@ -11,6 +11,7 @@
 #include "Projectile.h"
 
 #include <iostream>
+#include "ParticleGen.h"
 
 std::string display_text = "This is a test";
 
@@ -38,7 +39,7 @@ RenderItem* ejeZItem;
 //Projectile* proyectil;
 RenderItem* centroItem;
 std::vector<Projectile*> projectiles;
-
+ParticleGen* fuente;
 
 void crearEjes() {
 	Vector3D ejeX(10.0f, 0.0f, 0.0f); 
@@ -103,6 +104,9 @@ void initPhysics(bool interactive)
 	
 	
 	crearEjes();
+
+	fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -9.8f, 0.0f),0.99f,5.0f,50.0f);
+	
 	//particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
 	
 
@@ -128,6 +132,7 @@ void stepPhysics(bool interactive, double t)
 	for (auto p : projectiles) {
 		p->integrate(t);
 	}
+	fuente->update(t);
 }
 
 // Function to clean data
