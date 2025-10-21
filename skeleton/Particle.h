@@ -4,7 +4,7 @@
 class Particle 
 {
 public:
-	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Dampling, float lifetime);
+	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Dampling, float lifetime, Vector4 color, float tam);
 	~Particle();
 
 	virtual void integrate(double t);
@@ -17,8 +17,7 @@ protected:
 	float damping;
 	float lifeTime;
 	float time;
+	float tam;
 	RenderItem* renderItem;
-
-
 };
 

@@ -3,7 +3,7 @@
 #include <vector>
 class ParticleSys
 {
-private:
+public:
 	std::vector<ParticleGen*> particulasGen;
 	~ParticleSys();
 	void addParticle(ParticleGen* pg);

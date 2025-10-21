@@ -1,10 +1,7 @@
 #include "ParticleGen.h"
 
-
-
-
-ParticleGen::ParticleGen(Vector3D pos_, Vector3D vMed_, Vector3D vDevTip_, Vector3D gravity_, float damping_, float lifeTime_, float range_)
-	:pos(pos_), vMed(vMed_),vDevTip(vDevTip_), gr(gravity_),damping(damping_), lifeTime(lifeTime_), range(range_), gen(std::random_device{}())
+ParticleGen::ParticleGen(Vector3D pos_, Vector3D vMed_, Vector3D vDevTip_, Vector3D gravity_, float damping_, float lifeTime_, float range_, float posRange_, Vector4 color_, float tam_)
+	:pos(pos_), vMed(vMed_),vDevTip(vDevTip_), gr(gravity_),damping(damping_), lifeTime(lifeTime_), range(range_), posRange(posRange_),color(color_),tam(tam_), gen(std::random_device{}())
 {
    
 
@@ -24,33 +21,38 @@ void ParticleGen::update(double dt)
 
     for (auto it = particulas.begin(); it != particulas.end();) {
         Particle* p = *it;
-        if (p) {
+        
             p->integrate(dt);
-
-            if (!p->isAlive()) {
-                delete p;
-                it = particulas.erase(it);
-                
-            }
+            
+           
             Vector3D currentPos(p->pose.p.x, p->pose.p.y, p->pose.p.z);
-            if ((currentPos - pos).module(currentPos - pos) > range) {
+            Vector3D delta = currentPos - pos;
+            float dist = sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY() +delta.getZ() * delta.getZ());
+
+            if (!p->isAlive() || dist > range) {
                 delete p;
                 it = particulas.erase(it);
-                
             }
-        }
-        ++it;
+            else {
+                ++it;
+            }
     }
 }
 
 void ParticleGen::generateParticle()
 {
+    float px = getRandomRange((float)pos.getX(), (float)posRange);
+    float py = getRandomRange((float)pos.getY(), (float)posRange);
+    float pz = getRandomRange((float)pos.getZ(), (float)posRange);
+    Vector3D posRandom(px, py, pz);
+
+
 	double vx = getRandomRange(vMed.getX(), vDevTip.getX());
 	double vy= getRandomRange(vMed.getY(), vDevTip.getY());
 	double vz = getRandomRange(vMed.getZ(), vDevTip.getZ());
 	Vector3D vel(vx, vy, vz);
 	
-	particulas.push_back(new Particle(pos, vel, gr, damping, lifeTime));
+	particulas.push_back(new Particle(posRandom, vel, gr, damping, lifeTime,color, tam));
 }
 
 int ParticleGen::getRandomRange(float min, float max) 

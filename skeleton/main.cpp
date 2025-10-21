@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include "ParticleGen.h"
+#include "ParticleSys.h"
 
 std::string display_text = "This is a test";
 
@@ -40,6 +41,9 @@ RenderItem* ejeZItem;
 RenderItem* centroItem;
 std::vector<Projectile*> projectiles;
 ParticleGen* fuente;
+ParticleGen* fuego;
+ParticleGen* niebla;
+ParticleSys* listaGenParticles = new ParticleSys();
 
 void crearEjes() {
 	Vector3D ejeX(10.0f, 0.0f, 0.0f); 
@@ -77,6 +81,7 @@ void disparar()
 	Projectile* p = new Projectile(pos, Vector3D(0, 0, 0), 0.995f, 0.625f, Vector3D(8, 20, 0), velSim, Vector3D(0, -9.8f, 0));
 
 	projectiles.push_back(p);
+
 }
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -105,17 +110,13 @@ void initPhysics(bool interactive)
 	
 	crearEjes();
 
-	fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -9.8f, 0.0f),0.99f,5.0f,50.0f);
-	
+	//fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -10.0f, 0.0f),0.99f,4.0f,50.0f,0.1f, Vector4(0, 0, 1, 1),0.5f);
+	//fuego = new ParticleGen(Vector3D(0, 50, 0), Vector3D(0, 25, 0), Vector3D(10, 10, 10), Vector3D(0.0f, -10.0f, 0.0f), 0.96f, 2.0f, 150.0f, 0.1f, Vector4(1, 0, 0, 1), 0.5f);
+	niebla = new ParticleGen(Vector3D(50, 0, 0), Vector3D(0, 1, 0), Vector3D(1, 1, 1),Vector3D(0, -1, 0), 0.999f, 10.0f, 100.0f, 10.0f,Vector4(0.5f, 0.5f, 0.5f, 0.5f), 0.2f);
+	listaGenParticles->addParticle(niebla);
 	//particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
 	
 
-	//IMPORTANTEPARA PRACTICA 1.2 : 
-	// GetCamera()->GetDir(); -> direccion camara
-	//GetCamera()->getEye(); -> centro de la camara
-	
-	//sphere12 = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(1, 1, 1), { 1,1,1,1 });
-	//RegisterRenderItem(sphere12);
 	}
 
 
@@ -132,7 +133,9 @@ void stepPhysics(bool interactive, double t)
 	for (auto p : projectiles) {
 		p->integrate(t);
 	}
-	fuente->update(t);
+	//fuente->update(t);
+	//fuego->update(t);
+	listaGenParticles->update(t);
 }
 
 // Function to clean data
@@ -172,7 +175,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	//case 'B': break;
 	//case ' ':	break;
 	case '1': // pelota baloncesto
-		// speedSimulada (m/s), velRealMagnitude (m/s), masaReal (kg)
 		disparar();
 		break;
 	case ' ':
