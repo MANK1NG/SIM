@@ -1,10 +1,10 @@
 #include "Projectile.h"
 
 
-Projectile::Projectile(Vector3D pos,  Vector3D acel, float damping, float masaReal, Vector3D velReal, Vector3D velSimulada, Vector3D grReal) : Particle(pos, velSimulada, acel, damping, 10.0f,Vector4(0,0,0,1),1.0f), masaR(masaReal), velR(velReal), velS(velSimulada),grR(grReal)
+Projectile::Projectile(Vector3D pos,  Vector3D acel, float damping, float masaReal, Vector3D velReal, Vector3D velSimulada, Vector3D grReal) : Particle(pos, velSimulada, damping, 10.0f,Vector4(0,0,0,1),1.0f, masaReal), masaR(masaReal), velR(velReal), velS(velSimulada),grR(grReal)
 {
-	float modReal = velR.module(velR);
-	float modSim = velS.module(velS);
+	float modReal = velR.module();
+	float modSim = velS.module();
 	masaS = masaR * pow(modReal / modSim, 2);
 	float factor = pow(modSim / modReal, 2);
 	grS = Vector3D(grR.getX() * factor, grR.getY() * factor, grR.getZ() * factor);
@@ -17,6 +17,7 @@ Projectile::Projectile(Vector3D pos,  Vector3D acel, float damping, float masaRe
 
 void Projectile::integrate(double t)
 {
+	Vector3D acc = { 1.0f,2.0f,2.0f };
 	acc = grS;
 
 

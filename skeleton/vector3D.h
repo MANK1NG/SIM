@@ -19,16 +19,16 @@ public:
 
 
 
-	inline Vector3D normalice(const Vector3D& _vec) const {
-		int modulo = module(_vec);
-		if (modulo == 0) {
+	inline Vector3D normalice() const {
+		float modulo = module();
+		if (modulo == 0.0f) {
 			return Vector3D(0, 0, 0);
 		}else{
-			return Vector3D(_vec.x / modulo, _vec.y / modulo, _vec.z / modulo);
+			return Vector3D(x / modulo, y / modulo, z / modulo);
 		}
 	}
-	inline int module(const Vector3D& _vec) const {
-		return sqrt(_vec.x* _vec.x + _vec.y*_vec.y + _vec.z*_vec.z);
+	inline int module() const {
+		return sqrt(x * x + y*y + z*z);
 	}
 
 	inline double escalar(const Vector3D& _vec) const {
@@ -50,14 +50,14 @@ public:
 		return *this;
 	}
 
-	inline Vector3D& operator+(const Vector3D& otro) {
+	inline Vector3D operator+(const Vector3D& otro) {
 		return Vector3D(x + otro.x, y + otro.y, z + otro.z);
 	}
-	inline Vector3D& operator-(const Vector3D& otro) {
+	inline Vector3D operator-(const Vector3D& otro) {
 		return Vector3D(x - otro.x, y - otro.y, z - otro.z);
 
 	}
-	inline Vector3D& operator*( const Vector3D& otro) const{
+	inline Vector3D operator*( const Vector3D& otro) const{
 		return Vector3D(x * otro.x, y * otro.y, z * otro.z);
 
 	}

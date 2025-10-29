@@ -1,10 +1,14 @@
 #pragma once
 #include "ParticleGen.h"
+#include "ForceSys.h"
 #include <vector>
 class ParticleSys
 {
-public:
+private:
 	std::vector<ParticleGen*> particulasGen;
+	ForceSys* forceSys;
+public:
+	ParticleSys(ForceSys* fs);
 	~ParticleSys();
 	void addParticle(ParticleGen* pg);
 	void update(float dt);

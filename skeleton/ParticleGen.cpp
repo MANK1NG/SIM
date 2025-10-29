@@ -1,7 +1,7 @@
 #include "ParticleGen.h"
 
-ParticleGen::ParticleGen(Vector3D pos_, Vector3D vMed_, Vector3D vDevTip_, Vector3D gravity_, float damping_, float lifeTime_, float range_, float posRange_, Vector4 color_, float tam_)
-	:pos(pos_), vMed(vMed_),vDevTip(vDevTip_), gr(gravity_),damping(damping_), lifeTime(lifeTime_), range(range_), posRange(posRange_),color(color_),tam(tam_), gen(std::random_device{}())
+ParticleGen::ParticleGen(Vector3D pos_, Vector3D vMed_, Vector3D vDevTip_, float damping_, float lifeTime_, float range_, float posRange_, Vector4 color_, float tam_,float mass_,  ForceSys* fs_)
+	:pos(pos_), vMed(vMed_),vDevTip(vDevTip_),damping(damping_), lifeTime(lifeTime_), range(range_), posRange(posRange_),color(color_),tam(tam_),mass(mass_),forceSys(fs_), gen(std::random_device{}())
 {
    
 
@@ -52,7 +52,13 @@ void ParticleGen::generateParticle()
 	double vz = getRandomRange(vMed.getZ(), vDevTip.getZ());
 	Vector3D vel(vx, vy, vz);
 	
-	particulas.push_back(new Particle(posRandom, vel, gr, damping, lifeTime,color, tam));
+    Particle* p = new Particle(posRandom, vel, damping, lifeTime, color, tam, mass);
+    particulas.push_back(p);
+    
+    if (forceSys) {
+        for (auto fg : forceGen)
+            forceSys->addForce(p, fg);
+    }
 }
 
 int ParticleGen::getRandomRange(float min, float max) 
@@ -60,4 +66,8 @@ int ParticleGen::getRandomRange(float min, float max)
 
 	 std::normal_distribution<float>dist(min, max);
      return dist(gen);
+}
+
+void ParticleGen::addForce(ForceGen* fg){
+    forceGen.push_back(fg);
 }

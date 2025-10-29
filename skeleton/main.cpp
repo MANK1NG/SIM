@@ -13,6 +13,10 @@
 #include <iostream>
 #include "ParticleGen.h"
 #include "ParticleSys.h"
+#include "GravityForceGen.h"
+#include "WindForceGen.h"
+#include "TorbellinoForceGen.h"
+#include "ExplosionForce.h"
 
 std::string display_text = "This is a test";
 
@@ -43,7 +47,14 @@ std::vector<Projectile*> projectiles;
 ParticleGen* fuente;
 ParticleGen* fuego;
 ParticleGen* niebla;
-ParticleSys* listaGenParticles = new ParticleSys();
+ParticleGen* torbellino;
+ForceSys* fs = new ForceSys();
+ParticleSys* listaGenParticles = new ParticleSys(fs);
+GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
+//WindForceGen* windGen = new WindForceGen({ 5, 0, 0 }, 0.2f);
+TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f),
+	10.0f,15.0f,Vector3D(0,10,0), 8.0f, 40.0f);
+ExplosionForce* explosion = new ExplosionForce({ 0, 0, 0 }, 50.0f, 50000.0f, 7.0f);
 
 void crearEjes() {
 	Vector3D ejeX(10.0f, 0.0f, 0.0f); 
@@ -112,8 +123,14 @@ void initPhysics(bool interactive)
 
 	//fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -10.0f, 0.0f),0.99f,4.0f,50.0f,0.1f, Vector4(0, 0, 1, 1),0.5f);
 	//fuego = new ParticleGen(Vector3D(0, 50, 0), Vector3D(0, 25, 0), Vector3D(10, 10, 10), Vector3D(0.0f, -10.0f, 0.0f), 0.96f, 2.0f, 150.0f, 0.1f, Vector4(1, 0, 0, 1), 0.5f);
-	niebla = new ParticleGen(Vector3D(50, 0, 0), Vector3D(0, 1, 0), Vector3D(1, 1, 1),Vector3D(0, -1, 0), 0.999f, 10.0f, 100.0f, 10.0f,Vector4(0.5f, 0.5f, 0.5f, 0.5f), 0.2f);
+	niebla = new ParticleGen(Vector3D(0, 0, 0), Vector3D(0, 0, 0), Vector3D(1, 1, 1), 
+		0.999f, 20.0f, 50.0f, 10.0f,Vector4(0.6f, 0.6f, 0.6f, 1.0f), 0.5f,1.0f, fs);
+	
+	torbellino = new ParticleGen(Vector3D(0, 10, 0), Vector3D(0, 0, 0), Vector3D(10, 5, 10), 0.999f, 25.0f, 80.0f, 15.0f, Vector4(0.7f, 0.7f, 1.0f, 1.0f), 1.0f, 2.0f, fs);
 	listaGenParticles->addParticle(niebla);
+	niebla->addForce(torbellinoGen);
+	niebla->addForce(explosion);
+
 	//particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
 	
 
@@ -177,8 +194,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '1': // pelota baloncesto
 		disparar();
 		break;
-	case ' ':
+	case '2':
 	{
+		explosion->explode();
 		break;
 	}
 	default:

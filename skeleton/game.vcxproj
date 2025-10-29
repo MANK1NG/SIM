@@ -254,6 +254,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="ExplosionForce.cpp" />
+    <ClCompile Include="ForceSys.cpp" />
+    <ClCompile Include="GravityForceGen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleGen.cpp" />
@@ -262,10 +265,16 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="TorbellinoForceGen.cpp" />
+    <ClCompile Include="WindForceGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="ExplosionForce.h" />
+    <ClInclude Include="ForceGen.h" />
+    <ClInclude Include="ForceSys.h" />
+    <ClInclude Include="GravityForceGen.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleGen.h" />
     <ClInclude Include="ParticleSys.h" />
@@ -273,7 +282,9 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="TorbellinoForceGen.h" />
     <ClInclude Include="vector3D.h" />
+    <ClInclude Include="WindForceGen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
