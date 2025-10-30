@@ -17,7 +17,7 @@
 #include "WindForceGen.h"
 #include "TorbellinoForceGen.h"
 #include "ExplosionForce.h"
-
+#include "TiroCanasta.h"
 std::string display_text = "This is a test";
 
 
@@ -40,8 +40,6 @@ ContactReportCallback gContactReportCallback;
 RenderItem* ejeXItem;
 RenderItem* ejeYItem;
 RenderItem* ejeZItem;
-//Particle* particula;
-//Projectile* proyectil;
 RenderItem* centroItem;
 std::vector<Projectile*> projectiles;
 ParticleGen* fuente;
@@ -55,6 +53,13 @@ GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f),
 	10.0f,15.0f,Vector3D(0,10,0), 8.0f, 40.0f);
 ExplosionForce* explosion = new ExplosionForce({ 0, 0, 0 }, 50.0f, 50000.0f, 7.0f);
+
+
+////////////////////////////////////////////
+///////////////////////////Cosas juego
+TiroCanasta* tiroCanasta;
+
+
 
 void crearEjes() {
 	Vector3D ejeX(10.0f, 0.0f, 0.0f); 
@@ -118,7 +123,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	
-	
+	tiroCanasta = new TiroCanasta();
 	crearEjes();
 
 	//fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -10.0f, 0.0f),0.99f,4.0f,50.0f,0.1f, Vector4(0, 0, 1, 1),0.5f);
@@ -146,7 +151,10 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	//particula->integrate(t);
+
+	tiroCanasta->update(t);
+
+
 	for (auto p : projectiles) {
 		p->integrate(t);
 	}
@@ -168,6 +176,8 @@ void cleanupPhysics(bool interactive)
 	for (auto p : projectiles) {
 		delete p; 
 	}
+	delete tiroCanasta;
+
 	//delete particula;
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
@@ -199,10 +209,26 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		explosion->explode();
 		break;
 	}
+	case ' ':
+
+		tiroCanasta->cargarDisparo();
+		break;
 	default:
 		break;
 	}
 }
+void keyRelease(unsigned char key)
+{
+	switch (toupper(key))
+	{
+	case ' ':
+		tiroCanasta->soltarDisparo();
+		break;
+	default:
+		break;
+	}
+}
+
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {

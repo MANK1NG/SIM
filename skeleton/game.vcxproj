@@ -265,6 +265,7 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="TiroCanasta.cpp" />
     <ClCompile Include="TorbellinoForceGen.cpp" />
     <ClCompile Include="WindForceGen.cpp" />
   </ItemGroup>
@@ -282,6 +283,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="TiroCanasta.h" />
     <ClInclude Include="TorbellinoForceGen.h" />
     <ClInclude Include="vector3D.h" />
     <ClInclude Include="WindForceGen.h" />
