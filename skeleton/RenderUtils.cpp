@@ -4,6 +4,7 @@
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
+#include "TiroCanasta.h"
 
 
 using namespace physx;
@@ -15,6 +16,8 @@ extern void keyPress(unsigned char key, const PxTransform& camera);
 extern void keyRelease(unsigned char key);
 extern PxPhysics* gPhysics;
 extern PxMaterial* gMaterial;
+extern TiroCanasta* tiroCanasta;
+
 
 std::vector<const RenderItem*> gRenderItems;
 
@@ -80,6 +83,7 @@ void idleCallback()
 float stepTime = 0.0f;
 //#define FIXED_STEP
 
+
 void renderCallback()
 {
 	double t = GetCounter();
@@ -129,8 +133,11 @@ void renderCallback()
 	//	scene->getActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC, reinterpret_cast<PxActor**>(&actors[0]), nbActors);
 	//	renderActors(&actors[0], static_cast<PxU32>(actors.size()), true, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 	//}
-
+	if (tiroCanasta)
+		tiroCanasta->renderBarraCarga();
 	finishRender();
+	
+
 }
 
 void exitCallback(void)

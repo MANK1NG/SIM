@@ -57,7 +57,7 @@ ExplosionForce* explosion = new ExplosionForce({ 0, 0, 0 }, 50.0f, 50000.0f, 7.0
 
 ////////////////////////////////////////////
 ///////////////////////////Cosas juego
-TiroCanasta* tiroCanasta;
+TiroCanasta* tiroCanasta = nullptr;
 
 
 
@@ -94,7 +94,7 @@ void disparar()
 	Vector3D velSim = dirVec.multEscalar(5.0f); 
 	
 
-	Projectile* p = new Projectile(pos, Vector3D(0, 0, 0), 0.995f, 0.625f, Vector3D(8, 20, 0), velSim, Vector3D(0, -9.8f, 0));
+	Projectile* p = new Projectile(pos, Vector3D(0, 0, 0), 0.995f, 0.625f, Vector3D(8, 20, 0), velSim);
 
 	projectiles.push_back(p);
 
@@ -123,7 +123,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	
-	tiroCanasta = new TiroCanasta();
+	tiroCanasta = new TiroCanasta(fs);
 	crearEjes();
 
 	//fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -10.0f, 0.0f),0.99f,4.0f,50.0f,0.1f, Vector4(0, 0, 1, 1),0.5f);
@@ -138,7 +138,6 @@ void initPhysics(bool interactive)
 
 	//particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
 	
-
 	}
 
 
@@ -153,6 +152,7 @@ void stepPhysics(bool interactive, double t)
 	gScene->fetchResults(true);
 
 	tiroCanasta->update(t);
+	tiroCanasta->renderBarraCarga();
 
 
 	for (auto p : projectiles) {
@@ -161,6 +161,8 @@ void stepPhysics(bool interactive, double t)
 	//fuente->update(t);
 	//fuego->update(t);
 	listaGenParticles->update(t);
+	fs->update(t);
+
 }
 
 // Function to clean data

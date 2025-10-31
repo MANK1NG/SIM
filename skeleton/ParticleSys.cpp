@@ -21,7 +21,6 @@ void ParticleSys::addParticle(ParticleGen* pg)
 
 void ParticleSys::update(float dt)
 {
-	forceSys->update(dt);
 
 	for (auto pg : particulasGen) {
 		pg->update(dt);

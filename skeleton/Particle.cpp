@@ -6,7 +6,7 @@ Particle::Particle(Vector3D pos_, Vector3D Vel, float Dam, float lifeTime = 5.0f
 	pose =  physx::PxTransform(physx::PxVec3(pos_.getX(), pos_.getY(), pos_.getZ()));
 	
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(tam)), &pose, color);
-	RegisterRenderItem(renderItem);
+	//RegisterRenderItem(renderItem);
 }
 
 Particle::~Particle()
