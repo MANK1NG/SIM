@@ -20,6 +20,7 @@
     <ClCompile Include="TorbellinoForceGen.cpp" />
     <ClCompile Include="ExplosionForce.cpp" />
     <ClCompile Include="TiroCanasta.cpp" />
+    <ClCompile Include="ZonaDeVientoGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="TorbellinoForceGen.h" />
     <ClInclude Include="ExplosionForce.h" />
     <ClInclude Include="TiroCanasta.h" />
+    <ClInclude Include="ZonaDeVientoGen.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

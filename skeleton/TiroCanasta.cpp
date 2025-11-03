@@ -1,9 +1,21 @@
 #include "tiroCanasta.h"
 #include <iostream>
-
 TiroCanasta::TiroCanasta(ForceSys* fs_):fuerza(0.0f), fuerzaMaxima(60.0f), masFuerza(10.0f), cargando(false), fs(fs_)
 {
-	
+
+
+	tipoBolaN = 1;
+
+	//Zona Viento
+	Vector3D viento(0.0f, 15.0f, 0.0f);
+	Vector3D zona(10.0f, 5.0f, 2.0f);
+	float radio = 1.0f;
+	poseZonaViento = physx::PxTransform(physx::PxVec3(zona.getX(), zona.getY(), zona.getZ()));
+	zonaViento = new ZonaDeVientoGen(viento, 0.2f, 0.05f, zona, radio);
+	rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
+
+	//Explosion
+	explosionBol = new ExplosionForce(Vector3D(0, 0, 0), 6.0f, 5.0f, 0.2f);
 }
 
 TiroCanasta::~TiroCanasta()
@@ -25,20 +37,21 @@ void TiroCanasta::soltarDisparo()
 {
 	cargando = false;
 	
-	physx::PxVec3 eye = GetCamera()->getEye();
-	physx::PxVec3 dir = GetCamera()->getDir();
-	Vector3D pos(eye.x, eye.y, eye.z);
-	Vector3D dirVec(dir.x, dir.y, dir.z);
-	dirVec.normalice();
-
-	crearBola(pos, dirVec, fuerza);
-
-	fuerza = 0.0f;
+	disparar();
 }
 void TiroCanasta::update(double t) {
-	for (auto b : bolas) {
-		b->integrate(t);
+	for (auto it = bolas.begin(); it != bolas.end();) {
+		Projectile* p = *it;
+		p->integrate(t);
+		if (!p->isAlive()) {
+			delete p;
+			it = bolas.erase(it);
+		}
+		else {
+			++it;
+		}
 	}
+	
 	if (cargando) {
 		fuerza += masFuerza*(t*15);
 		if (fuerza > fuerzaMaxima) {
@@ -51,7 +64,9 @@ void TiroCanasta::renderBarraCarga()
 {
 	if (cargando) {
 		float porcentaje = fuerza / fuerzaMaxima;
-		if (porcentaje > 1.0f) porcentaje = 1.0f;
+		if (porcentaje > 1.0f) {
+			porcentaje = 1.0f;
+		}
 
 
 		const float x = -0.8f, y = -0.8f;
@@ -88,6 +103,21 @@ void TiroCanasta::renderBarraCarga()
 
 }
 
+void TiroCanasta::cambiarBola(int cb) 
+{
+	tipoBolaN = cb;
+}
+
+void TiroCanasta::activarExplosion()
+{
+	if (!bolas.empty()) {
+		Projectile* ultbol = bolas.back();
+		Vector3D posBol = ultbol->getPos();
+		explosionBol->setCenter(posBol);
+		explosionBol->explode();
+	}
+}
+
 void TiroCanasta::disparar()
 {
 	physx::PxVec3 eye = GetCamera()->getEye();
@@ -96,18 +126,38 @@ void TiroCanasta::disparar()
 	Vector3D pos(eye.x, eye.y, eye.z);
 	Vector3D dirVec(dir.x, dir.y, dir.z);
 	dirVec.normalice();
-
+	
 	crearBola(pos, dirVec, fuerza);
 	fuerza = 0.0f;
-}
 
+	}
 void TiroCanasta::crearBola(Vector3D pos, Vector3D dir, float fuerza)
 {
-	
+	if (tipoBolaN == 3) {
+		tp.masa = 0.5f;
+		tp.color = Vector4(0.4f, 0.7f, 1.0f, 1.0f);
+		tp.tam = 0.1f;
+		tp.velReal =  Vector3D(10, 25, 0);
+	}
+	else if (tipoBolaN == 2) {
+		tp.masa = 5.0f;
+		tp.color = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
+		tp.tam = 5.0f;
+		tp.velReal = Vector3D(4, 10, 0);
+	}
+	else {
+		tp.masa = 1.0f;
+		tp.color = Vector4(1.0f, 0.7f, 0.2f, 1.0f);
+		tp.tam = 1.0f;
+		tp.velReal = Vector3D(8, 20, 0);
+	}
 	Vector3D spawnPos = pos + dir.multEscalar(3.0f);
 	Vector3D vel = dir.multEscalar(fuerza);
-	Projectile* p = new Projectile(spawnPos, Vector3D(0, 0, 0), 0.99f, 1.0f, Vector3D(8, 20, 0), vel);
+	
+	Projectile* p = new Projectile(spawnPos, 0.99f, tp.masa, tp.velReal, vel, tp.color,tp.tam);
 	fs->addForce(p,gravityGen);
+	fs->addForce(p, zonaViento);
+	fs->addForce(p, explosionBol);
 	bolas.push_back(p);
 
 }

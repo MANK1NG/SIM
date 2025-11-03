@@ -63,7 +63,11 @@ void ParticleGen::generateParticle()
 
 int ParticleGen::getRandomRange(float min, float max) 
 {
+        //Distribucion Uniforme
+    //std::uniform_real_distribution<float> dist(min, max);
 
+    float media = (min + max) / 2.0f;
+    float sigma = std::abs(max - min) / 6.0f;
 	 std::normal_distribution<float>dist(min, max);
      return dist(gen);
 }

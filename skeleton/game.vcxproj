@@ -268,6 +268,7 @@
     <ClCompile Include="TiroCanasta.cpp" />
     <ClCompile Include="TorbellinoForceGen.cpp" />
     <ClCompile Include="WindForceGen.cpp" />
+    <ClCompile Include="ZonaDeVientoGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="TorbellinoForceGen.h" />
     <ClInclude Include="vector3D.h" />
     <ClInclude Include="WindForceGen.h" />
+    <ClInclude Include="ZonaDeVientoGen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

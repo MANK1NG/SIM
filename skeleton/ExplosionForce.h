@@ -9,7 +9,7 @@ public:
     void update(double dt) override;
     void updateForce(Particle* p, double t) override;
     void explode();
-
+    void setCenter(Vector3D c) { center = c; };
 private:
     Vector3D center;
     float radius;

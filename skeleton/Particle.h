@@ -2,6 +2,8 @@
 #include "vector3D.h"
 #include "RenderUtils.hpp"
 #include "ForceSys.h"
+#include "PxRigidDynamic.h"
+
 class Particle 
 {
 public:
@@ -15,8 +17,8 @@ public:
 	void setMass(float m) { mass = m; }
 	void addForce(const Vector3D f) { force = force + f; }
 	void clearForce() { force = Vector3D(0, 0, 0); }
-	Vector3D getVel() const { return vel; }
-	Vector3D getPos() const { return pos; }
+	Vector3D getVel()  { return vel; }
+	Vector3D getPos();
 protected:
 	Vector3D pos;
 	Vector3D vel;
