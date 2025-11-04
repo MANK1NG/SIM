@@ -22,7 +22,18 @@ void ParticleSys::addParticle(ParticleGen* pg)
 void ParticleSys::update(float dt)
 {
 
-	for (auto pg : particulasGen) {
+	for (auto it = particulasGen.begin(); it != particulasGen.end(); )
+	{
+		ParticleGen* pg = *it;
 		pg->update(dt);
+		if (pg->isAlive() && pg->isEmpty())
+		{
+			delete pg;
+			it = particulasGen.erase(it);
+		}
+		else
+		{
+			++it;
+		}
 	}
 }

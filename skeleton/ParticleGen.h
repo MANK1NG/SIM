@@ -14,6 +14,9 @@ public:
 	 void update(double dt) ;
 	 void generateParticle() ;
 	 void addForce(ForceGen* fg);
+	 void setTiempoMax(float t) { tiempoMax = t; }
+	 bool isAlive() const { return tiempoMax > 0.0f && tiempoEspera >= tiempoMax; }
+	 bool isEmpty() const { return particulas.empty(); }
 
 private:
 	std::vector<Particle*> particulas;
@@ -31,5 +34,7 @@ private:
 	ForceSys* forceSys;
 	std::vector<ForceGen*> forceGen;
 	float getRandomRange(float a, float b) ;
+	float tiempoEspera = 0.0f;
+	float tiempoMax = -1.0f;
 };
 

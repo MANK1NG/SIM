@@ -18,7 +18,12 @@ ParticleGen::~ParticleGen()
 
 void ParticleGen::update(double dt)
 {
-	generateParticle();
+    tiempoEspera += dt;
+
+    if (tiempoMax < 0.0f || tiempoEspera < tiempoMax) {
+        generateParticle();
+
+    }
 
     for (auto it = particulas.begin(); it != particulas.end();) {
         Particle* p = *it;
@@ -64,14 +69,14 @@ void ParticleGen::generateParticle()
 
 float ParticleGen::getRandomRange(float a, float b) 
 {
-        //Distribucion Uniforme
+   //Distribucion Uniforme
    std::uniform_real_distribution<float> dist(a, b);
 
+   //Distribucion normal
   /* float media = (min + max) / 2.0f;
     float sigma = std::abs(max - min) / 6.0f;
     if (sigma == 0.0f) sigma = 0.0001f;
-    
-	 std::normal_distribution<float>dist(media, sigma);*/
+    std::normal_distribution<float>dist(media, sigma);*/
      return dist(gen);
 }
 

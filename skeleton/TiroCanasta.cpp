@@ -1,6 +1,6 @@
 #include "tiroCanasta.h"
 #include <iostream>
-TiroCanasta::TiroCanasta(ForceSys* fs_):fuerza(0.0f), fuerzaMaxima(60.0f), masFuerza(10.0f), cargando(false), fs(fs_)
+TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_):fuerza(0.0f), fuerzaMaxima(60.0f), masFuerza(10.0f), cargando(false), fs(fs_), ps(ps_)
 {
 
 
@@ -15,7 +15,7 @@ TiroCanasta::TiroCanasta(ForceSys* fs_):fuerza(0.0f), fuerzaMaxima(60.0f), masFu
 	rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
 
 	//Explosion
-	explosionBol = new ExplosionForce(Vector3D(0, 0, 0), 6.0f, 5.0f, 0.2f);
+	explosionBol = new ExplosionForce(Vector3D(0, 0, 0), 15.0f, 150000.0f, 1.0f);
 }
 
 TiroCanasta::~TiroCanasta()
@@ -110,12 +110,27 @@ void TiroCanasta::cambiarBola(int cb)
 
 void TiroCanasta::activarExplosion()
 {
-	if (!bolas.empty()) {
-		Projectile* ultbol = bolas.back();
-		Vector3D posBol = ultbol->getPos();
-		explosionBol->setCenter(posBol);
-		explosionBol->explode();
+	if (bolas.empty()) {
+		return;
 	}
+
+
+	Projectile* ultBol = bolas.back();
+	Vector3D posBol = ultBol->getPos();
+
+	explosionBol->setCenter(posBol);
+	explosionBol->explode();
+
+	
+
+	ParticleGen* gen = new ParticleGen(posBol,Vector3D(0.0f, 0.0f, 0.0f), Vector3D(10.0f, 10.0f, 10.0f)
+		,0.95f,2.0f,8.0f,0.5f,Vector4(1.0f, 0.6f, 0.2f, 1.0f),0.2f,0.5f,fs);
+
+	gen->setTiempoMax(0.3f);
+	explosionBol->activada=false;
+	ps->addParticle(gen);
+	delete ultBol;
+	bolas.pop_back();
 }
 
 void TiroCanasta::disparar()

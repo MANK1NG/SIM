@@ -7,11 +7,13 @@
 #include "ForceSys.h"
 #include "core.hpp"
 #include <vector>
+#include "ParticleGen.h"
+#include "ParticleSys.h"
 
 class TiroCanasta
 {
 public:
-	TiroCanasta(ForceSys* fs_);
+	TiroCanasta(ForceSys* fs_, ParticleSys* ps_);
 	~TiroCanasta();
 	void cargarDisparo();
 	void soltarDisparo();
@@ -33,6 +35,7 @@ private:
 	float masFuerza = 5.0f;
 	bool cargando;
 	ForceSys* fs;
+	ParticleSys* ps;
 	int tipoBolaN;
 	float masa;
 	tipoBola tp;
@@ -40,6 +43,7 @@ private:
 	GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 	ExplosionForce* explosionBol;
 	std::vector<Projectile*> bolas;
+	std::vector<ParticleGen*> generadoresBolas;
 	ZonaDeVientoGen* zonaViento;
 	RenderItem* rZonaViento;
 	physx::PxTransform poseZonaViento;
