@@ -1,4 +1,5 @@
 #include "ParticleGen.h"
+#include <iostream>
 
 ParticleGen::ParticleGen(Vector3D pos_, Vector3D vMed_, Vector3D vDevTip_, float damping_, float lifeTime_, float range_, float posRange_, Vector4 color_, float tam_,float mass_,  ForceSys* fs_)
 	:pos(pos_), vMed(vMed_),vDevTip(vDevTip_),damping(damping_), lifeTime(lifeTime_), range(range_), posRange(posRange_),color(color_),tam(tam_),mass(mass_),forceSys(fs_), gen(std::random_device{}())
@@ -41,15 +42,15 @@ void ParticleGen::update(double dt)
 
 void ParticleGen::generateParticle()
 {
-    float px = getRandomRange((float)pos.getX(), (float)posRange);
-    float py = getRandomRange((float)pos.getY(), (float)posRange);
-    float pz = getRandomRange((float)pos.getZ(), (float)posRange);
+    float px = getRandomRange(pos.getX() - posRange, pos.getX() + posRange);
+    float py = getRandomRange(pos.getY() - posRange, pos.getY() + posRange);
+    float pz = getRandomRange(pos.getZ() - posRange, pos.getZ() + posRange);
     Vector3D posRandom(px, py, pz);
 
 
-	double vx = getRandomRange(vMed.getX(), vDevTip.getX());
-	double vy= getRandomRange(vMed.getY(), vDevTip.getY());
-	double vz = getRandomRange(vMed.getZ(), vDevTip.getZ());
+    float vx = getRandomRange(vMed.getX() - vDevTip.getX(), vMed.getX() + vDevTip.getX());
+    float vy = getRandomRange(vMed.getY() - vDevTip.getY(), vMed.getY() + vDevTip.getY());
+    float vz = getRandomRange(vMed.getZ() - vDevTip.getZ(), vMed.getZ() + vDevTip.getZ());
 	Vector3D vel(vx, vy, vz);
 	
     Particle* p = new Particle(posRandom, vel, damping, lifeTime, color, tam, mass);
@@ -61,14 +62,16 @@ void ParticleGen::generateParticle()
     }
 }
 
-int ParticleGen::getRandomRange(float min, float max) 
+float ParticleGen::getRandomRange(float a, float b) 
 {
         //Distribucion Uniforme
-    //std::uniform_real_distribution<float> dist(min, max);
+   std::uniform_real_distribution<float> dist(a, b);
 
-    float media = (min + max) / 2.0f;
+  /* float media = (min + max) / 2.0f;
     float sigma = std::abs(max - min) / 6.0f;
-	 std::normal_distribution<float>dist(min, max);
+    if (sigma == 0.0f) sigma = 0.0001f;
+    
+	 std::normal_distribution<float>dist(media, sigma);*/
      return dist(gen);
 }
 

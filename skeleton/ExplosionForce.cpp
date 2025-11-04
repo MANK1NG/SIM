@@ -24,7 +24,7 @@ void ExplosionForce::updateForce(Particle* p, double dt)
             float magnitude = K / (dist * dist) * physx::PxExp(-time / t);
             Vector3D force = dis.multEscalar(magnitude);
             p->addForce(force);
-
+            activada = false;
         }
     }
 }

@@ -1,8 +1,8 @@
 - 3 balones distintos cada uno con diferente masa que dependiendo de que botón des ósea 1, 2 o 3 disparara una bola distinta.///////////////////////////////////////
 
 --zona de viento que afecte a las bolas ///////////////////////
-- que pueda explotar el balón cuando toque una tecla
+- que pueda explotar el balón cuando toque una tecla , cuando pulse la tecla se genera un sistema de partículas en la posición de la bola y afecta la fuerza de la explosion
 
--sistema de particulas (  decorativo o algo)
+-sistema de particulas (  decorativo o algo)////////////////////// TENGO QUE HACER QUE SE PONGAN Y QUITEN
 
 -barra de carga con el disparo ///////////////////////////////////////////////////////////////////////

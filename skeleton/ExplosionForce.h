@@ -10,12 +10,13 @@ public:
     void updateForce(Particle* p, double t) override;
     void explode();
     void setCenter(Vector3D c) { center = c; };
+    bool activada;
+
 private:
     Vector3D center;
     float radius;
     float K;
     float t;
     float time;
-    bool activada;
 };
 

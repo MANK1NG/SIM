@@ -30,6 +30,6 @@ private:
 	float mass;
 	ForceSys* forceSys;
 	std::vector<ForceGen*> forceGen;
-	int getRandomRange(float min, float max) ;
+	float getRandomRange(float a, float b) ;
 };
 
