@@ -52,8 +52,7 @@ ForceSys* fs = new ForceSys();
 ParticleSys* listaGenParticles = new ParticleSys(fs);
 GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 //WindForceGen* windGen = new WindForceGen({ 5, 0, 0 }, 0.2f);
-TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f),
-	10.0f,15.0f,Vector3D(0,10,0), 8.0f, 40.0f);
+TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f),10.0f,15.0f,Vector3D(0, 0, 0),40.0f,40.0f);
 ExplosionForce* explosion = new ExplosionForce({ 0, 0, 0 }, 50.0f, 50000.0f, 7.0f);
 std::vector<RenderItem*> campo;
 
@@ -72,19 +71,19 @@ void crearCampo() {
 	Vector3D canastaPos(0.0f, 3.05f, -23.0f);
 
 
-	RenderItem* r1 = new RenderItem(CreateShape(PxSphereGeometry(0.5f)),new PxTransform(esquina1.getX(), esquina1.getY(), esquina1.getZ()),Vector4(1, 1, 0, 1));
+	RenderItem* r1 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)), new PxTransform(esquina1.getX(), esquina1.getY(), esquina1.getZ()), Vector4(1, 1, 0, 1));
 	RegisterRenderItem(r1);
 	campo.push_back(r1);
 
-	RenderItem* r2 = new RenderItem(CreateShape(PxSphereGeometry(0.5f)),new PxTransform(esquina2.getX(), esquina2.getY(), esquina2.getZ()),Vector4(1, 1, 0, 1));
+	RenderItem* r2 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)),new PxTransform(esquina2.getX(), esquina2.getY(), esquina2.getZ()),Vector4(1, 1, 0, 1));
 	RegisterRenderItem(r2);
 	campo.push_back(r2);
 
-	RenderItem* r3 = new RenderItem(CreateShape(PxSphereGeometry(0.5f)),new PxTransform(esquina3.getX(), esquina3.getY(), esquina3.getZ()),Vector4(1, 1, 0, 1));
+	RenderItem* r3 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)),new PxTransform(esquina3.getX(), esquina3.getY(), esquina3.getZ()),Vector4(1, 1, 0, 1));
 	RegisterRenderItem(r3);
 	campo.push_back(r3);
 
-	RenderItem* r4 = new RenderItem(CreateShape(PxSphereGeometry(0.5f)),new PxTransform(esquina4.getX(), esquina4.getY(), esquina4.getZ()),Vector4(1, 1, 0, 1));
+	RenderItem* r4 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)),new PxTransform(esquina4.getX(), esquina4.getY(), esquina4.getZ()),Vector4(1, 1, 0, 1));
 	RegisterRenderItem(r4);
 	campo.push_back(r4);
 
@@ -102,12 +101,13 @@ void crearCampo() {
 
 	//CONFETI
 	Vector3D posConfetiIzq = canastaPos + Vector3D(-5.0f, -1.0f, 0.0f);
-	Vector3D posConfetiDer = canastaPos + Vector3D(5.0f, -1.0f, 0.0f);
+	Vector3D posConfetiDer = Vector3D(0, 0, 0);// canastaPos + Vector3D(5.0f, -1.0f, 0.0f);
 
-	confetiIzq = new ParticleGen(posConfetiIzq,Vector3D(0, 5, 0),Vector3D(5, 5, 5),0.98f,1.0f,20.0f,1.0f,Vector4(1, 1, 0, 1),0.3f,1.0f,fs);
+	///confetiIzq = new ParticleGen(posConfetiIzq,Vector3D(0, 5, 0),Vector3D(5, 5, 5),0.98f,1.0f,20.0f,1.0f,Vector4(1, 1, 0, 1),0.3f,1.0f,fs);
 
-	confetiDer = new ParticleGen(posConfetiDer,Vector3D(0, 5, 0),Vector3D(5, 5, 5),0.98f,1.0f,20.0f,1.0f,Vector4(1, 0, 1, 1),0.3f,1.0f,fs);
-	listaGenParticles->addParticle(confetiIzq);
+	confetiDer = new ParticleGen(posConfetiDer,Vector3D(0, 5, 0),Vector3D(5, 5, 5),0.98f,5000.0f,5000.0f,1.0f,Vector4(1, 0, 1, 1),0.3f,200.0f,fs);
+	//listaGenParticles->addParticle(confetiIzq);
+	confetiDer->addForce(torbellinoGen);
 	listaGenParticles->addParticle(confetiDer);
 
 }

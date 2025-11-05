@@ -7,16 +7,20 @@ TorbellinoForceGen::TorbellinoForceGen(const Vector3D& windVelocity_, float k1_,
 void TorbellinoForceGen::updateForce(Particle* p, double t)
 {
     Vector3D pos = p->getPos();
-    Vector3D diff = pos - center;
 
-  
-    Vector3D aux = { -K*(pos.getZ() - center.getZ()), 0,K*( pos.getX() - center.getX())};
+    Vector3D dist(pos.getX() - center.getX(), 0.0f, pos.getZ() - center.getZ());
+    float distM = dist.module();
 
-    Vector3D relativeVel = windVelocity - p->getVel();
-    float speed = relativeVel.module();
+    Vector3D tg(-dist.getZ(), 0.0f, dist.getX());
+    tg = tg.multEscalar(1.0f / distM);
 
-    Vector3D force = relativeVel.multEscalar(k1)
-        + relativeVel.multEscalar(speed * k2);
+    
+    float fz = K * (distM / radius);
+    Vector3D fzv = tg.multEscalar(fz);
 
+    Vector3D relVel = fzv - p->getVel();
+    float speed = relVel.module();
+
+    Vector3D force = relVel.multEscalar(k1) + relVel.multEscalar(speed * k2);
     p->addForce(force);
 }
