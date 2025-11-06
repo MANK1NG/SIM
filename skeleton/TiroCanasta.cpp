@@ -12,7 +12,7 @@ TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_):fuerza(0.0f), fuerzaMa
 	float radio = 5.0f;
 	poseZonaViento = physx::PxTransform(physx::PxVec3(zona.getX(), zona.getY(), zona.getZ()));
 	zonaViento = new ZonaDeVientoGen(viento, 0.2f, 0.05f, zona, radio);
-	rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
+	//rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
 
 	//Explosion
 	explosionBol = new ExplosionForce(Vector3D(0, 0, 0), 15.0f, 150000.0f, 1.0f);
@@ -121,10 +121,7 @@ void TiroCanasta::activarExplosion()
 	explosionBol->setCenter(posBol);
 	explosionBol->explode();
 
-	
-
-	ParticleGen* gen = new ParticleGen(posBol,Vector3D(0.0f, 0.0f, 0.0f), Vector3D(10.0f, 10.0f, 10.0f)
-		,0.95f,2.0f,8.0f,0.5f,Vector4(1.0f, 0.6f, 0.2f, 1.0f),0.2f,0.5f,fs, TDist::UNIFORME);
+	ParticleGen* gen = new ParticleGen(posBol,Vector3D(0.0f, 0.0f, 0.0f), Vector3D(10.0f, 10.0f, 10.0f),0.95f,2.0f,8.0f,0.5f,Vector4(1.0f, 0.6f, 0.2f, 1.0f),0.2f,0.5f,fs, TDist::UNIFORME);
 
 	gen->setTiempoMax(0.3f);
 	explosionBol->activada = false;
