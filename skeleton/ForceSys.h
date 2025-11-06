@@ -10,6 +10,7 @@ public:
 	std::unordered_map<Particle*,std::vector<ForceGen*>> fuerzasGen;
 	~ForceSys();
 	void addForce(Particle* p, ForceGen* fg);
+	void removeForces(Particle* p);
 	void update(float dt);
 };
 

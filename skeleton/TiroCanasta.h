@@ -4,6 +4,7 @@
 #include "GravityForceGen.h"
 #include "ZonaDeVientoGen.h"
 #include "ExplosionForce.h"
+#include "TorbellinoForceGen.h"
 #include "ForceSys.h"
 #include "core.hpp"
 #include <vector>
@@ -22,7 +23,7 @@ public:
 	void renderBarraCarga();
 	void cambiarBola(int cb);
 	void activarExplosion();
-
+	ZonaDeVientoGen* getZonaViento() { return zonaViento; };
 private:
 	struct tipoBola {
 		float masa;

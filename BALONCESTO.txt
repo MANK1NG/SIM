@@ -1,0 +1,12 @@
+BALONCESTO
+
+COMO JUGAR:
+Manteniendo el espacio -- Cargar disparo (Cuanto mas pulses el espacio mas fuerza sale la bala)
+Soltar espacio -- Disparar
+Tecla 1 -- Cambiar a la bola tipo 1 ( la normal)
+Tecla 2 -- Cambuar a la bola tipo 2 ( la bola mas grande y mas pesada)
+Tecla 3 -- Cambiar a la bola tipo 3 ( la bola mas pequeña y menos pesada)
+Tecla 4 -- Activar explosion ( solo se podra activar la explosion si hay una bala en pantalla y afectara a la ultima bala creada)
+Tecla T -- Activar/Desactivar los generadores de particulas que simulan los confeti
+Tecla R -- Activar/Desactivar la fuerza del torbellino
+Tecla V -- Activar/Desactivar la fuerza del viento

@@ -29,9 +29,9 @@ D) Definición de los Generadores de Partículas.
 atributo de los mismos. A partir de esta partícula modelo generarán nuevas
 partículas que serán copias de esta.//////////////////////////////////////////////////////
 2) La generación de partículas se realizará con una posición variable definida mediante
-al menos las dos distribuciones probabilísticas vistas en clase (Normal y Gaussiana).          ------------------Poner por parámetros los dos tipos de distribucion
+al menos las dos distribuciones probabilísticas vistas en clase (Normal y Gaussiana).          ////////////////------------------Poner por parámetros los dos tipos de distribucion
 3) Cada clase Sistema de Partículas C) tendrá uno o varios Generadores de Partículas
-asignados y será esta clase la encargada de activarlos y desactivarlos.				------------------Activar y desactivar generadores de particulas
+asignados y será esta clase la encargada de activarlos y desactivarlos.				////////////////////------------------Activar y desactivar generadores de particulas
 
 E) Definición de las clases de Generador de Fuerza de forma que se cumplan los siguientes
 requisitos.

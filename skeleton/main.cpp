@@ -37,28 +37,18 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
-RenderItem* ejeXItem;
-RenderItem* ejeYItem;
-RenderItem* ejeZItem;
-RenderItem* centroItem;
-std::vector<Projectile*> projectiles;
-ParticleGen* fuente;
-ParticleGen* fuego;
-ParticleGen* niebla;
-ParticleGen* torbellino;
-ParticleGen* confetiIzq = nullptr;
-ParticleGen* confetiDer = nullptr;
-ForceSys* fs = new ForceSys();
-ParticleSys* listaGenParticles = new ParticleSys(fs);
-GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
-//WindForceGen* windGen = new WindForceGen({ 5, 0, 0 }, 0.2f);
-TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f),10.0f,15.0f,Vector3D(0, 0, 0),40.0f,40.0f);
-ExplosionForce* explosion = new ExplosionForce({ 0, 0, 0 }, 50.0f, 50000.0f, 7.0f);
-std::vector<RenderItem*> campo;
+
 
 ////////////////////////////////////////////
 ///////////////////////////Cosas juego
 TiroCanasta* tiroCanasta = nullptr;
+
+ParticleGen* confetiIzq = nullptr;
+ParticleGen* confetiDer = nullptr;
+ForceSys* fs = new ForceSys();
+ParticleSys* listaGenParticles = new ParticleSys(fs);
+TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f), 10.0f, 15.0f, Vector3D(0.0f, 2.05f, -23.0f), 40.0f, 60.0f);
+std::vector<RenderItem*> campo;
 
 
 void crearCampo() {
@@ -100,36 +90,18 @@ void crearCampo() {
 	GetCamera()->setDir(direccion);
 
 	//CONFETI
-	Vector3D posConfetiIzq = canastaPos + Vector3D(-5.0f, -1.0f, 0.0f);
-	Vector3D posConfetiDer = Vector3D(0, 0, 0);// canastaPos + Vector3D(5.0f, -1.0f, 0.0f);
+	Vector3D posConfetiIzq = canastaPos + Vector3D(-10.0f, -1.0f, 0.0f);
+	Vector3D posConfetiDer =  canastaPos + Vector3D(10.0f, -1.0f, 0.0f);
 
-	///confetiIzq = new ParticleGen(posConfetiIzq,Vector3D(0, 5, 0),Vector3D(5, 5, 5),0.98f,1.0f,20.0f,1.0f,Vector4(1, 1, 0, 1),0.3f,1.0f,fs);
+	confetiIzq = new ParticleGen(posConfetiIzq,Vector3D(0, 5, 0),Vector3D(2,2, 2),0.98f,2.0f,40.0f,1.0f,Vector4(1, 1, 0, 1),0.3f,1.0f,fs, TDist::NORMAL);
 
-	confetiDer = new ParticleGen(posConfetiDer,Vector3D(0, 5, 0),Vector3D(5, 5, 5),0.98f,5000.0f,5000.0f,1.0f,Vector4(1, 0, 1, 1),0.3f,200.0f,fs);
-	//listaGenParticles->addParticle(confetiIzq);
-	confetiDer->addForce(torbellinoGen);
-	listaGenParticles->addParticle(confetiDer);
-
-}
-void crearEjes() {
-	Vector3D ejeX(10.0f, 0.0f, 0.0f); 
-	Vector3D ejeY(0.0f, 10.0f, 0.0f); 
-	Vector3D ejeZ(0.0f, 0.0f, 10.0f);
-	Vector3D centro(0.0f, 0.0f, 0.0f);
-
-	ejeXItem = new RenderItem(CreateShape(PxSphereGeometry(2)),new PxTransform(ejeX.getX(), ejeX.getY(), ejeX.getZ()),Vector4(1, 0, 0, 1));
-	RegisterRenderItem(ejeXItem);
-
-	 ejeYItem = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(ejeY.getX(), ejeY.getY(), ejeY.getZ()), Vector4(0, 1, 0, 1));
-	 RegisterRenderItem(ejeYItem);
-
+	confetiDer = new ParticleGen(posConfetiDer,Vector3D(0, 5, 0),Vector3D(2, 2, 2),0.98f,2.0f,40.0f,1.0f,Vector4(1, 0, 1, 1),0.3f,1.0f,fs, TDist::UNIFORME);
 	
-	 ejeZItem = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(ejeZ.getX(), ejeZ.getY(), ejeZ.getZ()), Vector4(0, 0, 1, 1));
-	 RegisterRenderItem(ejeZItem);
+	confetiDer->addForce(torbellinoGen);
+	confetiIzq->addForce(torbellinoGen);
 
-	 centroItem = new RenderItem(CreateShape(PxSphereGeometry(2)), new PxTransform(centro.getX(), centro.getY(), centro.getZ()), Vector4(1, 1, 1, 1));
-
-	RegisterRenderItem(centroItem);
+	listaGenParticles->addParticle(confetiIzq);
+	listaGenParticles->addParticle(confetiDer);
 
 }
 
@@ -159,22 +131,8 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 	
 
-
-
 	tiroCanasta = new TiroCanasta(fs, listaGenParticles);
 	crearCampo();
-	//fuente = new ParticleGen(Vector3D(0, 50, 0),Vector3D(0, 20, 0),Vector3D(5, 5, 5),Vector3D(0.0f, -10.0f, 0.0f),0.99f,4.0f,50.0f,0.1f, Vector4(0, 0, 1, 1),0.5f);
-	//fuego = new ParticleGen(Vector3D(0, 50, 0), Vector3D(0, 25, 0), Vector3D(10, 10, 10), Vector3D(0.0f, -10.0f, 0.0f), 0.96f, 2.0f, 150.0f, 0.1f, Vector4(1, 0, 0, 1), 0.5f);
-	niebla = new ParticleGen(Vector3D(0, 0, 0), Vector3D(0, 0, 0), Vector3D(1, 1, 1),
-		0.999f, 20.0f, 50.0f, 10.0f,Vector4(0.6f, 0.6f, 0.6f, 1.0f), 0.5f,1.0f, fs);
-	
-	torbellino = new ParticleGen(Vector3D(0, 10, 0), Vector3D(0, 0, 0), Vector3D(10, 5, 10), 0.999f, 25.0f, 80.0f, 15.0f, Vector4(0.7f, 0.7f, 1.0f, 1.0f), 1.0f, 2.0f, fs);
-	//listaGenParticles->addParticle(torbellino);
-	//torbellino->addForce(torbellinoGen);
-	//niebla->addForce(explosion);
-
-	//particula = new Particle(Vector3D(0, 0, 0), Vector3D(1, 0, 0), Vector3D(0, 1, 0), 0.998);
-	
 	}
 
 
@@ -191,12 +149,6 @@ void stepPhysics(bool interactive, double t)
 	tiroCanasta->update(t);
 	tiroCanasta->renderBarraCarga();
 
-
-	for (auto p : projectiles) {
-		p->integrate(t);
-	}
-	//fuente->update(t);
-	//fuego->update(t);
 	listaGenParticles->update(t);
 	fs->update(t);
 
@@ -209,14 +161,11 @@ void cleanupPhysics(bool interactive)
 
 	PX_UNUSED(interactive);
 	
-	for (auto p : projectiles) {
-		delete p; 
-	}
+	
 	delete tiroCanasta;
 	for (auto c : campo) {
 		RegisterRenderItem(c);
 	}
-	//delete particula;
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
@@ -237,16 +186,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
-	case '1': // pelota baloncesto
+
+	case '1': 
 		tiroCanasta->cambiarBola(1);
 		break;
 	case '2':
 	{
 		tiroCanasta->cambiarBola(2);
 
-		//explosion->explode();
 		break;
 	}case '3': 
 		tiroCanasta->cambiarBola(3);
@@ -257,6 +204,17 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case '4':
 		tiroCanasta->activarExplosion();
+		break;
+	case 'T':
+		confetiDer->togglePausar();
+		confetiIzq->togglePausar();
+		break;
+	case 'R':
+		torbellinoGen->toggleActivo();
+		break;
+	case 'V':
+		
+		tiroCanasta->getZonaViento()->toggleActivo();
 		break;
 	default:
 		break;

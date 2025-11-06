@@ -25,7 +25,10 @@ void ParticleSys::update(float dt)
 	for (auto it = particulasGen.begin(); it != particulasGen.end(); )
 	{
 		ParticleGen* pg = *it;
-		pg->update(dt);
+		
+			pg->update(dt);
+
+		
 		if (pg->isAlive() && pg->isEmpty())
 		{
 			delete pg;

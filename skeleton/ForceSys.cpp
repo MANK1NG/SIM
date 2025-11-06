@@ -7,6 +7,14 @@ void ForceSys::addForce(Particle* p, ForceGen* fg)
 	fuerzasGen[p].push_back(fg);
 }
 
+void ForceSys::removeForces(Particle* p)
+{
+    auto it = fuerzasGen.find(p);
+    if (it != fuerzasGen.end()) {
+        fuerzasGen.erase(it);
+    }
+}
+
 
 void ForceSys::update(float dt) {
     std::vector<Particle*> aEliminar;
@@ -19,8 +27,10 @@ void ForceSys::update(float dt) {
         }
 
         for (auto fg : par.second) {
+            if (fg->getActivo()) {
             fg->updateForce(p, dt);
             fg->update(dt);
+            }
         }
         
     }
