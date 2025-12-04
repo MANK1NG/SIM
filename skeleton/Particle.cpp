@@ -1,4 +1,4 @@
-#include "Particle.h"
+﻿#include "Particle.h"
 #include <iostream>
 
 Particle::Particle(Vector3D pos_, Vector3D Vel, float Dam, float lifeTime = 5.0f, Vector4 color = Vector4(0, 0, 1, 1), float tam = 2, float mass_ = 1.0f) :pos(pos_), vel(Vel), damping(Dam), lifeTime(lifeTime), time(0.0f), tam(tam), mass(mass_)

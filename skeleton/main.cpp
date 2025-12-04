@@ -1,4 +1,4 @@
-#include <ctype.h>
+﻿#include <ctype.h>
 
 #include <PxPhysicsAPI.h>
 
@@ -18,6 +18,7 @@
 #include "TorbellinoForceGen.h"
 #include "ExplosionForce.h"
 #include "TiroCanasta.h"
+#include "AnchoredSpringForceGen.h"
 std::string display_text = "This is a test";
 
 
@@ -49,11 +50,26 @@ ForceSys* fs = new ForceSys();
 ParticleSys* listaGenParticles = new ParticleSys(fs);
 TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f), 10.0f, 15.0f, Vector3D(0.0f, 2.05f, -23.0f), 40.0f, 60.0f);
 std::vector<RenderItem*> campo;
+GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 
+
+Particle* springParticle = nullptr;
+AnchoredSpringForceGen* anchoredSpring = nullptr;
+Particle* A = nullptr;
+Particle* B = nullptr;
+
+SpringForceGenerator* springAB = nullptr;
 
 void crearCampo() {
+	//CAMARA
+	PxVec3 canastaPosPx(0.0f, 3.05f, 10.0f);
+	PxVec3 posicionCam(0.0f, 3.0f, 14.0f);
+	PxVec3 direccion = (canastaPosPx - posicionCam).getNormalized();
 
-	//CAMPO
+	GetCamera()->setPos(posicionCam);
+	GetCamera()->setDir(direccion);
+
+	/*//CAMPO
 	Vector3D esquina1(-15.0f, 0.0f, 10.0f);
 	Vector3D esquina2(15.0f, 0.0f,10.0f);
 	Vector3D esquina3(-15.0f, 0.0f, -25.0f);
@@ -81,14 +97,7 @@ void crearCampo() {
 	RegisterRenderItem(canasta);
 	campo.push_back(canasta);
 
-	//CAMARA
-	PxVec3 canastaPosPx(0.0f, 3.05f, 10.0f);
-	PxVec3 posicionCam(0.0f, 3.0f, 14.0f);
-	PxVec3 direccion = (canastaPosPx - posicionCam).getNormalized();
-
-	GetCamera()->setPos(posicionCam);
-	GetCamera()->setDir(direccion);
-
+	
 	//CONFETI
 	Vector3D posConfetiIzq = canastaPos + Vector3D(-10.0f, -1.0f, 0.0f);
 	Vector3D posConfetiDer =  canastaPos + Vector3D(10.0f, -1.0f, 0.0f);
@@ -103,6 +112,17 @@ void crearCampo() {
 	listaGenParticles->addParticle(confetiIzq);
 	listaGenParticles->addParticle(confetiDer);
 
+	*/
+	springParticle = new Particle(Vector3D(0, 5, 0),Vector3D(0, 0, 0),0.99f,400,Vector4(0, 1, 0, 1),4.0f,1.0f);
+	A =  new Particle(Vector3D(-1, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(1, 0, 0, 1), 1.0f, 1);
+	B = new Particle(Vector3D(1, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(0, 1, 0, 1), 1.0f, 1);
+	anchoredSpring = new AnchoredSpringForceGen(7.0, 3.0, Vector3D(0, 8, 0));
+	springAB = new SpringForceGenerator(4.0, 2.0, B);
+	
+	
+	fs->addForce(springParticle, anchoredSpring);
+	fs->addForce(A, springAB);
+	fs->addForce(B, springAB);
 }
 
 
@@ -131,7 +151,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 	
 
-	tiroCanasta = new TiroCanasta(fs, listaGenParticles);
+	//tiroCanasta = new TiroCanasta(fs, listaGenParticles);
 	crearCampo();
 	}
 
@@ -146,12 +166,15 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	tiroCanasta->update(t);
-	tiroCanasta->renderBarraCarga();
+	//tiroCanasta->update(t);
+	//tiroCanasta->renderBarraCarga();
 
-	listaGenParticles->update(t);
+	//listaGenParticles->update(t);
+	
 	fs->update(t);
-
+	springParticle->integrate(t);
+	A->integrate(t);
+	B->integrate(t);
 }
 
 // Function to clean data
@@ -215,6 +238,20 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'V':
 		
 		tiroCanasta->getZonaViento()->toggleActivo();
+		break;
+
+	case '+':
+		anchoredSpring->setK(anchoredSpring->getK() + 2.0);
+		springAB->setK(springAB->getK() + 2.0);
+		break;
+
+	case '-':
+		anchoredSpring->setK(anchoredSpring->getK() - 2.0);
+		springAB->setK(springAB->getK() - 2.0);
+		break;
+
+	case 'F':
+		springParticle->addForce(Vector3D(0, 100, 0));
 		break;
 	default:
 		break;

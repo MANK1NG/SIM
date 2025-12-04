@@ -253,6 +253,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnchoredSpringForceGen.cpp" />
+    <ClCompile Include="BuoyancyForceGen.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="ExplosionForce.cpp" />
     <ClCompile Include="ForceSys.cpp" />
@@ -265,12 +267,15 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="SpringForceGen.cpp" />
     <ClCompile Include="TiroCanasta.cpp" />
     <ClCompile Include="TorbellinoForceGen.cpp" />
     <ClCompile Include="WindForceGen.cpp" />
     <ClCompile Include="ZonaDeVientoGen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnchoredSpringForceGen.h" />
+    <ClInclude Include="BuoyancyForceGen.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="ExplosionForce.h" />
@@ -284,6 +289,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="SpringForceGen.h" />
     <ClInclude Include="TiroCanasta.h" />
     <ClInclude Include="TorbellinoForceGen.h" />
     <ClInclude Include="vector3D.h" />

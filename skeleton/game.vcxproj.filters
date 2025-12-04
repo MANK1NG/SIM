@@ -21,6 +21,9 @@
     <ClCompile Include="ExplosionForce.cpp" />
     <ClCompile Include="TiroCanasta.cpp" />
     <ClCompile Include="ZonaDeVientoGen.cpp" />
+    <ClCompile Include="SpringForceGen.cpp" />
+    <ClCompile Include="AnchoredSpringForceGen.cpp" />
+    <ClCompile Include="BuoyancyForceGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -45,6 +48,9 @@
     <ClInclude Include="ExplosionForce.h" />
     <ClInclude Include="TiroCanasta.h" />
     <ClInclude Include="ZonaDeVientoGen.h" />
+    <ClInclude Include="SpringForceGen.h" />
+    <ClInclude Include="AnchoredSpringForceGen.h" />
+    <ClInclude Include="BuoyancyForceGen.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

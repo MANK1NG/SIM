@@ -1,4 +1,4 @@
-#include "tiroCanasta.h"
+﻿#include "tiroCanasta.h"
 #include <iostream>
 TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_):fuerza(0.0f), fuerzaMaxima(60.0f), masFuerza(10.0f), cargando(false), fs(fs_), ps(ps_)
 {
