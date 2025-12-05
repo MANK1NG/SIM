@@ -4,7 +4,7 @@ class BuoyancyForceGen :
     public ForceGen
 {
 public:
-    BuoyancyForceGen(float h, float V, float d);
+    BuoyancyForceGen(float h, float V, float d, Particle* liquid);
 
     void updateForce(Particle* particle, double t)override;
     virtual ~BuoyancyForceGen();

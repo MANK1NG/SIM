@@ -1,7 +1,11 @@
 ﻿#include "BuoyancyForceGen.h"
 
-BuoyancyForceGen::BuoyancyForceGen(float h, float V, float d)
+BuoyancyForceGen::BuoyancyForceGen(float h, float V, float d, Particle* liquid)
 {
+	_height = h;
+	_volume = V;
+	_liquid_density = d;
+	_liquid_particle = liquid;
 }
 
 void BuoyancyForceGen::updateForce(Particle* particle, double t)

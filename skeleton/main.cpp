@@ -62,6 +62,8 @@ Particle* B = nullptr;
 SpringForceGenerator* springAB = nullptr;
 SpringForceGenerator* springBA = nullptr;
 BuoyancyForceGen* flota = nullptr;
+Particle* cuboFlotante = nullptr;
+Particle* agua = nullptr;
 void crearCampo() {
 	//CAMARA
 	PxVec3 canastaPosPx(0.0f, 3.05f, 10.0f);
@@ -127,8 +129,16 @@ void crearCampo() {
 	fs->addForce(A, springAB);
 	fs->addForce(B, springBA);
 
+	agua = new Particle(Vector3D(10, 0, 0),Vector3D(0, 0, 0),1.0f,100000.f,Vector4(0, 0, 1, 1),0.1f,1000.0f);
+	cuboFlotante = new Particle(Vector3D(10, 2, 0),Vector3D(0, 0, 0),0.999f,100000.f,Vector4(1, 0, 0, 1),0.5f,5.0f);
+	float altura = 0.5f;
+	float volumen = 0.1f;
+	float densidadAgua = 1000.0f;
 
-	//flota = new BuoyancyForceGen()
+	flota = new BuoyancyForceGen(altura, volumen, densidadAgua, agua);
+	fs->addForce(cuboFlotante, flota);
+	fs->addForce(cuboFlotante, gravityGen);
+
 }
 
 
@@ -181,6 +191,7 @@ void stepPhysics(bool interactive, double t)
 	springParticle->integrate(t);
 	A->integrate(t);
 	B->integrate(t);
+	cuboFlotante->integrate(t);
 }
 
 // Function to clean data
