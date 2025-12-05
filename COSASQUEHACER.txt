@@ -1,54 +1,13 @@
-//////////////////////////////- 3 balones distintos cada uno con diferente masa que dependiendo de que botón des ósea 1, 2 o 3 disparara una bola distinta.///////////////////////////////////////
 
-/////////////////////////--zona de viento que afecte a las bolas ///////////////////////
--////////////////////////////// que pueda explotar el balón cuando toque una tecla , cuando pulse la tecla se genera un sistema de partículas en la posición de la bola y afecta la fuerza de la explosion
-
-//////////////////////-sistema de particulas (  decorativo o algo)////////////////////// 
-////////////////////-barra de carga con el disparo ///////////////////////////////////////////////////////////////////////
-
-
-
-
-
-TENGO QUE HACER QUE SE PONGAN Y QUITEN
-A)Definición de una clase partícula con al menos los siguientes métodos y atributos:
-1) Uno de los métodos de integración vistos en clase. //////////////////////////////////
-2) Masa como parámetro y al menos dos partículas definidas con distinta masa.////////////////////////////////////////
-3) Gestión de Fuerzas y aceleraciones teniendo en cuenta la masa.////////////////////////////////////////////
-
-B) Implementación de la clase proyectil con un método de escalado de velocidad, energíay fuerzas como se vio en la práctica de proyectiles. Al menos debe haber implementado dos tipos de proyectiles./////////////////////////////////////////////////////////////////////
-
-
-
-C) Definición de la clase Sistema de Partículas que use la clase partícula definida en A).
-Esta clase se encarga de gestionar conjuntos de partículas y los generadores (Fuerza y
-Partículas) de las mismas. ///////////////////////////////////
-
-D) Definición de los Generadores de Partículas.
-1) Los generadores de partículas usarán una partícula modelo que se define como
-atributo de los mismos. A partir de esta partícula modelo generarán nuevas
-partículas que serán copias de esta.//////////////////////////////////////////////////////
-2) La generación de partículas se realizará con una posición variable definida mediante
-al menos las dos distribuciones probabilísticas vistas en clase (Normal y Gaussiana).          ////////////////------------------Poner por parámetros los dos tipos de distribucion
-3) Cada clase Sistema de Partículas C) tendrá uno o varios Generadores de Partículas
-asignados y será esta clase la encargada de activarlos y desactivarlos.				////////////////////------------------Activar y desactivar generadores de particulas
-
-E) Definición de las clases de Generador de Fuerza de forma que se cumplan los siguientes
-requisitos.
-1) El cálculo de fuerza se realiza de manera independiente para cada partícula. Es la
-partícula la encargada de llamar al Generador de Fuerza con su información.////////////////////////////////
-2) Cada partícula puede recibir fuerzas de más de un Generador de Fuerzas./////////////////////////////////
-3) Cada Sistema de Partículas C) llevará un registro de los Generadores de Fuerzas que
-estén activos para sus partículas (puede haber ciertos Sistemas que no queremos
-que les afecten ciertas fuerzas). Los Generadores de fuerza serán independientes
-de los sistemas de partículas (un generador de fuerzas puede afectar a varios
-sistemas).////////////////////////////////////////////////////
-4) Utilizar al menos dos tipos de generadores de fuerza. Uno de los generadores de
-fuerza (al menos) ha de implementar una fuerza que varíe con la posición de la
-partícula. Otra de las fuerzas, al menos, ha de variar con el tiempo (por ejemplo una
-explosión).										-----------------Hacer mas generadores de fuerza
-Requisitos mínimos de ejecución:
-● Disparo de partículas (proyectiles) mediante una tecla asignada del teclado. Al menos
-un tipo de disparo se debe producir desde la cámara.
-● Activación/Desactivación de los generadores de fuerzas mediante teclas. Cada
-Generador de Fuerza E) debe tener una tecla diferente asignada.					-------------------Activar y desactivar generadores de fuerza
+Cambiar las pelotas a solidoRigido
+Hacer canasta con solido rigido
+Puntos/Tiempo
+detectar canasta
+Arreglar disparo que sea mas real
+Efectos cpn el transcurso del tiempo --- Viento
+canasta en diferentes posiciones si encesta o dependiendo del tiempo
+Efectos de canasta que se mueva
+hacer campo SolidoRigido
+Canasta que suba y baja con muelles
+Al encestar efecto de explosión
+Ciclo del juego-> botón empezar/ Pantalla final con los puntos totales
