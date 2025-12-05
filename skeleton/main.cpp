@@ -19,6 +19,7 @@
 #include "ExplosionForce.h"
 #include "TiroCanasta.h"
 #include "AnchoredSpringForceGen.h"
+#include "BuoyancyForceGen.h"
 std::string display_text = "This is a test";
 
 
@@ -59,7 +60,8 @@ Particle* A = nullptr;
 Particle* B = nullptr;
 
 SpringForceGenerator* springAB = nullptr;
-
+SpringForceGenerator* springBA = nullptr;
+BuoyancyForceGen* flota = nullptr;
 void crearCampo() {
 	//CAMARA
 	PxVec3 canastaPosPx(0.0f, 3.05f, 10.0f);
@@ -113,16 +115,20 @@ void crearCampo() {
 	listaGenParticles->addParticle(confetiDer);
 
 	*/
-	springParticle = new Particle(Vector3D(0, 5, 0),Vector3D(0, 0, 0),0.99f,400,Vector4(0, 1, 0, 1),4.0f,1.0f);
-	A =  new Particle(Vector3D(-1, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(1, 0, 0, 1), 1.0f, 1);
-	B = new Particle(Vector3D(1, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(0, 1, 0, 1), 1.0f, 1);
-	anchoredSpring = new AnchoredSpringForceGen(7.0, 3.0, Vector3D(0, 8, 0));
-	springAB = new SpringForceGenerator(4.0, 2.0, B);
-	
+	springParticle = new Particle(Vector3D(0, 10, 0),Vector3D(0, 0, 0),0.99f,9999,Vector4(0, 1, 0, 1),0.3f,1.0f);
+	A =  new Particle(Vector3D(1, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(1, 0, 0, 1), 1.0f, 1);
+	B = new Particle(Vector3D(5, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(0, 1, 0, 1), 1.0f, 1);
+	anchoredSpring = new AnchoredSpringForceGen(7.0, 3.0, Vector3D(0, 5, 0));
+	springAB = new SpringForceGenerator(1.0, 10.0, B);
+	springBA = new SpringForceGenerator(1.0, 10.0, A);
+
 	
 	fs->addForce(springParticle, anchoredSpring);
 	fs->addForce(A, springAB);
-	fs->addForce(B, springAB);
+	fs->addForce(B, springBA);
+
+
+	//flota = new BuoyancyForceGen()
 }
 
 

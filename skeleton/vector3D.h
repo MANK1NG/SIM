@@ -17,7 +17,9 @@ public:
 	inline float getY() const { return y; }
 	inline float getZ() const { return z; }
 
-
+	inline void setX(float _x) { x = _x; }
+	inline void setY(float _y) { y = _y; }
+	inline void setZ(float _z) { z = _z; }
 
 	inline Vector3D normalice() const {
 		float modulo = module();
