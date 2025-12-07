@@ -20,6 +20,8 @@
 #include "TiroCanasta.h"
 #include "AnchoredSpringForceGen.h"
 #include "BuoyancyForceGen.h"
+#include "SolidGen.h"
+#include "SolidSys.h"
 std::string display_text = "This is a test";
 
 
@@ -52,18 +54,7 @@ ParticleSys* listaGenParticles = new ParticleSys(fs);
 TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 0.0f), 10.0f, 15.0f, Vector3D(0.0f, 2.05f, -23.0f), 40.0f, 60.0f);
 std::vector<RenderItem*> campo;
 GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
-
-
-Particle* springParticle = nullptr;
-AnchoredSpringForceGen* anchoredSpring = nullptr;
-Particle* A = nullptr;
-Particle* B = nullptr;
-
-SpringForceGenerator* springAB = nullptr;
-SpringForceGenerator* springBA = nullptr;
-BuoyancyForceGen* flota = nullptr;
-Particle* cuboFlotante = nullptr;
-Particle* agua = nullptr;
+SolidSys* sistemaSolidos = new SolidSys();
 void crearCampo() {
 	//CAMARA
 	PxVec3 canastaPosPx(0.0f, 3.05f, 10.0f);
@@ -73,37 +64,17 @@ void crearCampo() {
 	GetCamera()->setPos(posicionCam);
 	GetCamera()->setDir(direccion);
 
-	/*//CAMPO
+	//CAMPO
 	Vector3D esquina1(-15.0f, 0.0f, 10.0f);
 	Vector3D esquina2(15.0f, 0.0f,10.0f);
 	Vector3D esquina3(-15.0f, 0.0f, -25.0f);
 	Vector3D esquina4(15.0f, 0.0f, -25.0f);
 	Vector3D canastaPos(0.0f, 3.05f, -23.0f);
 
-
-	RenderItem* r1 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)), new PxTransform(esquina1.getX(), esquina1.getY(), esquina1.getZ()), Vector4(1, 1, 0, 1));
-	RegisterRenderItem(r1);
-	campo.push_back(r1);
-
-	RenderItem* r2 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)),new PxTransform(esquina2.getX(), esquina2.getY(), esquina2.getZ()),Vector4(1, 1, 0, 1));
-	RegisterRenderItem(r2);
-	campo.push_back(r2);
-
-	RenderItem* r3 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)),new PxTransform(esquina3.getX(), esquina3.getY(), esquina3.getZ()),Vector4(1, 1, 0, 1));
-	RegisterRenderItem(r3);
-	campo.push_back(r3);
-
-	RenderItem* r4 = new RenderItem(CreateShape(PxBoxGeometry(0.5f, 0.5f, 0.5f)),new PxTransform(esquina4.getX(), esquina4.getY(), esquina4.getZ()),Vector4(1, 1, 0, 1));
-	RegisterRenderItem(r4);
-	campo.push_back(r4);
-
-	RenderItem* canasta = new RenderItem(CreateShape(PxSphereGeometry(0.6f)),new PxTransform(canastaPos.getX(), canastaPos.getY(), canastaPos.getZ()),Vector4(1, 0, 0, 1));
-	RegisterRenderItem(canasta);
-	campo.push_back(canasta);
-
+	
 	
 	//CONFETI
-	Vector3D posConfetiIzq = canastaPos + Vector3D(-10.0f, -1.0f, 0.0f);
+	/*Vector3D posConfetiIzq = canastaPos + Vector3D(-10.0f, -1.0f, 0.0f);
 	Vector3D posConfetiDer =  canastaPos + Vector3D(10.0f, -1.0f, 0.0f);
 
 	confetiIzq = new ParticleGen(posConfetiIzq,Vector3D(0, 5, 0),Vector3D(2,2, 2),0.98f,2.0f,40.0f,1.0f,Vector4(1, 1, 0, 1),0.3f,1.0f,fs, TDist::NORMAL);
@@ -114,31 +85,22 @@ void crearCampo() {
 	confetiIzq->addForce(torbellinoGen);
 
 	listaGenParticles->addParticle(confetiIzq);
-	listaGenParticles->addParticle(confetiDer);
+	listaGenParticles->addParticle(confetiDer);*/
+	PxTransform poseSuelo(PxVec3(0, -1, 0));
+	PxRigidStatic* suelo = gPhysics->createRigidStatic(poseSuelo);
 
-	*/
-	springParticle = new Particle(Vector3D(0, 10, 0),Vector3D(0, 0, 0),0.99f,9999,Vector4(0, 1, 0, 1),0.3f,1.0f);
-	A =  new Particle(Vector3D(1, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(1, 0, 0, 1), 1.0f, 1);
-	B = new Particle(Vector3D(5, 5, 0), Vector3D(0, 0, 0), 0.99f, 9999, Vector4(0, 1, 0, 1), 1.0f, 1);
-	anchoredSpring = new AnchoredSpringForceGen(7.0, 3.0, Vector3D(0, 5, 0));
-	springAB = new SpringForceGenerator(1.0, 10.0, B);
-	springBA = new SpringForceGenerator(1.0, 10.0, A);
+	PxShape* shapeSuelo = CreateShape(PxBoxGeometry(50, 1, 50)); // GRAN PLANO
+	suelo->attachShape(*shapeSuelo);
 
+	gScene->addActor(*suelo);
+
+	new RenderItem(shapeSuelo, suelo, Vector4(0.3, 0.3, 0.3, 1.0));
 	
-	fs->addForce(springParticle, anchoredSpring);
-	fs->addForce(A, springAB);
-	fs->addForce(B, springBA);
-
-	agua = new Particle(Vector3D(10, 0, 0),Vector3D(0, 0, 0),1.0f,100000.f,Vector4(0, 0, 1, 1),0.1f,1000.0f);
-	cuboFlotante = new Particle(Vector3D(10, 2, 0),Vector3D(0, 0, 0),0.999f,100000.f,Vector4(1, 0, 0, 1),0.5f,5.0f);
-	float altura = 0.5f;
-	float volumen = 0.1f;
-	float densidadAgua = 1000.0f;
-
-	flota = new BuoyancyForceGen(altura, volumen, densidadAgua, agua);
-	fs->addForce(cuboFlotante, flota);
-	fs->addForce(cuboFlotante, gravityGen);
-
+	PxMaterial* matGoma = gPhysics->createMaterial(0.8f, 0.8f, 0.9f); // rebota
+	PxMaterial* matMadera = gPhysics->createMaterial(0.4f, 0.4f, 0.3f);
+	PxMaterial* matMetal = gPhysics->createMaterial(0.2f, 0.1f, 0.05f);
+	sistemaSolidos->addGenerator(new SolidGen({ 0,10,0 }, 0.5f, matGoma, gPhysics,gScene));
+	sistemaSolidos->addGenerator(new SolidGen({ 2,10,0 }, 1.0f, matMetal, gPhysics,gScene));
 }
 
 
@@ -166,9 +128,9 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	
-
-	//tiroCanasta = new TiroCanasta(fs, listaGenParticles);
+	tiroCanasta = new TiroCanasta(fs, listaGenParticles);
 	crearCampo();
+
 	}
 
 
@@ -182,16 +144,14 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	//tiroCanasta->update(t);
-	//tiroCanasta->renderBarraCarga();
+	tiroCanasta->update(t);
+	tiroCanasta->renderBarraCarga();
 
-	//listaGenParticles->update(t);
+	listaGenParticles->update(t);
 	
 	fs->update(t);
-	springParticle->integrate(t);
-	A->integrate(t);
-	B->integrate(t);
-	cuboFlotante->integrate(t);
+	sistemaSolidos->update(t);
+	
 }
 
 // Function to clean data
@@ -255,20 +215,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'V':
 		
 		tiroCanasta->getZonaViento()->toggleActivo();
-		break;
-
-	case '+':
-		anchoredSpring->setK(anchoredSpring->getK() + 2.0);
-		springAB->setK(springAB->getK() + 2.0);
-		break;
-
-	case '-':
-		anchoredSpring->setK(anchoredSpring->getK() - 2.0);
-		springAB->setK(springAB->getK() - 2.0);
-		break;
-
-	case 'F':
-		springParticle->addForce(Vector3D(0, 100, 0));
 		break;
 	default:
 		break;
