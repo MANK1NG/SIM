@@ -84,7 +84,7 @@ Vector3D Canasta::getAro()
 {
     PxVec3 pos = actors[0]->getGlobalPose().p;
 
-    return Vector3D(pos.x, pos.y + 1.0f, pos.z);
+    return Vector3D(pos.x-5.0f, pos.y, pos.z);
 }
 
 float Canasta::getAroRadius()

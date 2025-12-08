@@ -288,6 +288,7 @@
     <ClInclude Include="ExplosionForce.h" />
     <ClInclude Include="ForceGen.h" />
     <ClInclude Include="ForceSys.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GravityForceGen.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleGen.h" />

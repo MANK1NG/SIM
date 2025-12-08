@@ -11,4 +11,5 @@ Arreglar disparo que sea mas real---------------------
 Efectos cpn el transcurso del tiempo --- Viento
 hacer campo SolidoRigido
 Al encestar efecto de explosión
+Sistema de mensajes que se envie Victria, Derrota,Pntll Inicio
 Ciclo del juego-> botón empezar/ Pantalla final con los puntos totales// quiza guardarlos en un txt para que se guarde el top de puntos

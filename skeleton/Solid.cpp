@@ -7,7 +7,7 @@ Solid::Solid(physx::PxTransform t, physx::PxGeometry& geo, Vector3 linear_v, Vec
 	gScene = scene;
 	physx::PxReal staticFriction = 0.5f;
 	physx::PxReal dynamicFriction = 0.3f;
-	physx::PxReal restitution = 0.7f; // Bounciness
+	physx::PxReal restitution = 0.7f;
 
 	physx::PxMaterial* material = phys->createMaterial(staticFriction, dynamicFriction, restitution);
 	body = phys->createRigidDynamic(t);

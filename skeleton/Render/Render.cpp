@@ -288,8 +288,8 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 
 	// Display text
 	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-	drawText(display_text, 0, 0);
-
+	drawText(display_text_puntos, 0, 0);
+	drawText(display_text_tiempo, 0, 20);
 	// Setup camera
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -379,6 +379,7 @@ void renderActors(PxRigidActor** actors, const PxU32 numActors, bool shadows, co
 
 void finishRender()
 {
+	
 	glutSwapBuffers();
 }
 

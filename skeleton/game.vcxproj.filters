@@ -61,6 +61,7 @@
     <ClInclude Include="Solid.h" />
     <ClInclude Include="Canasta.h" />
     <ClInclude Include="CanastaManager.h" />
+    <ClInclude Include="GameState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

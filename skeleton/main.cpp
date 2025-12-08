@@ -23,8 +23,7 @@
 #include "SolidGen.h"
 #include "SolidSys.h"
 #include "CanastaManager.h"
-
-std::string display_text = "This is a test";
+#include "GameState.h"
 
 using namespace physx;
 
@@ -58,6 +57,11 @@ GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 SolidSys* sistemaSolidos = new SolidSys();
 CanastaManager* basketManager = nullptr;
 int puntos = 0;
+std::string display_text_puntos = "";
+std::string display_text_tiempo = "";
+
+GameState gameState = STATE_MENU;
+double tiempoJuego = 30.0;
 
 void crearCampo() {
 	//CAMARA
@@ -77,7 +81,7 @@ void crearCampo() {
 
 	gScene->addActor(*suelo);
 
-	new RenderItem(shapeSuelo, suelo, Vector4(0.3, 0.3, 0.3, 1.0));
+	new RenderItem(shapeSuelo, suelo, Vector4(1, 1, 0, 1.0));
 }
 
 
@@ -118,23 +122,37 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
-	display_text = "Puntos: " + std::to_string(puntos);
+	if (gameState == STATE_GAME) {
+		tiempoJuego -= t;
+		display_text_puntos = "Puntos: " + std::to_string(puntos);
+		display_text_tiempo = "Tiempo: " + std::to_string((int)tiempoJuego);
+		if (tiempoJuego <= 0) {
+			tiempoJuego = 0;
+			if (puntos >= 20) gameState = STATE_WIN;
+			else gameState = STATE_LOSE;
+
+			return;
+		}
+	}
+	
 
 	PX_UNUSED(interactive);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+	if (gameState == STATE_GAME) {
+		tiroCanasta->update(t);
+		tiroCanasta->renderBarraCarga();
 
-	tiroCanasta->update(t);
-	tiroCanasta->renderBarraCarga();
+		listaGenParticles->update(t);
 
-	listaGenParticles->update(t);
-	
-	fs->update(t);
-	sistemaSolidos->update(t);
-	if (basketManager->getBaskets().size() > 0 && tiroCanasta->checkScored(basketManager->getBaskets())) {
-		puntos++;
+		fs->update(t);
+		sistemaSolidos->update(t);
+		if (basketManager->getBaskets().size() > 0 && tiroCanasta->checkScored(basketManager->getBaskets())) {
+			puntos++;
+		}
 	}
+	
 
 
 }
@@ -169,52 +187,73 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	switch(toupper(key))
+	switch (toupper(key))
 	{
-
-	case '1': 
-		tiroCanasta->cambiarBola(1);
-		break;
-	case '2':
-	{
-		tiroCanasta->cambiarBola(2);
-
-		break;
-	}case '3': 
-		tiroCanasta->cambiarBola(3);
-		break;
-	case ' ':
-
-		tiroCanasta->cargarDisparo();
-		break;
-	case '4':
-		tiroCanasta->activarExplosion();
-		break;
-	case 'T':
-		confetiDer->togglePausar();
-		confetiIzq->togglePausar();
-		break;
-	case 'R':
-		torbellinoGen->toggleActivo();
-		break;
-	case 'V':
-		
-		tiroCanasta->getZonaViento()->toggleActivo();
+	case 'E':
+		if (gameState == STATE_MENU) {
+			puntos = 0;
+			tiempoJuego = 30.0;
+			gameState = STATE_GAME;
+		}
+		else if (gameState == STATE_WIN || gameState == STATE_LOSE) {
+			gameState = STATE_MENU;
+		}
 		break;
 	default:
 		break;
 	}
+	if (gameState == STATE_GAME) {
+		switch (toupper(key))
+		{
+		case '1':
+			tiroCanasta->cambiarBola(1);
+			break;
+		case '2':
+		{
+			tiroCanasta->cambiarBola(2);
+
+			break;
+		}case '3':
+			tiroCanasta->cambiarBola(3);
+			break;
+		case ' ':
+
+			tiroCanasta->cargarDisparo();
+			break;
+		case '4':
+			tiroCanasta->activarExplosion();
+			break;
+		case 'T':
+			confetiDer->togglePausar();
+			confetiIzq->togglePausar();
+			break;
+		case 'R':
+			torbellinoGen->toggleActivo();
+			break;
+		case 'V':
+
+			tiroCanasta->getZonaViento()->toggleActivo();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	
 }
 void keyRelease(unsigned char key)
 {
-	switch (toupper(key))
-	{
-	case ' ':
-		tiroCanasta->soltarDisparo();
-		break;
-	default:
-		break;
+	if (gameState == STATE_GAME) {
+		switch (toupper(key))
+		{
+		case ' ':
+ 			tiroCanasta->soltarDisparo();
+			break;
+		default:
+			break;
+		}
 	}
+	
 }
 
 

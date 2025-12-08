@@ -166,6 +166,7 @@ void renderLoop()
 	atexit(exitCallback);
 
 	initPhysics(true);
+	
 	glutMainLoop();
 	
 }
