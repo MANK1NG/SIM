@@ -22,8 +22,9 @@
 #include "BuoyancyForceGen.h"
 #include "SolidGen.h"
 #include "SolidSys.h"
-std::string display_text = "This is a test";
+#include "CanastaManager.h"
 
+std::string display_text = "This is a test";
 
 using namespace physx;
 
@@ -55,52 +56,28 @@ TorbellinoForceGen* torbellinoGen = new TorbellinoForceGen(Vector3D(0.0f, 0.0f, 
 std::vector<RenderItem*> campo;
 GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 SolidSys* sistemaSolidos = new SolidSys();
+CanastaManager* basketManager = nullptr;
+int puntos = 0;
+
 void crearCampo() {
 	//CAMARA
-	PxVec3 canastaPosPx(0.0f, 3.05f, 10.0f);
-	PxVec3 posicionCam(0.0f, 3.0f, 14.0f);
+	PxVec3 canastaPosPx(0.0f, 20.0f, -30.0f);
+	PxVec3 posicionCam(0.0f, 3.0f, 100.0f);
 	PxVec3 direccion = (canastaPosPx - posicionCam).getNormalized();
 
 	GetCamera()->setPos(posicionCam);
 	GetCamera()->setDir(direccion);
 
-	//CAMPO
-	Vector3D esquina1(-15.0f, 0.0f, 10.0f);
-	Vector3D esquina2(15.0f, 0.0f,10.0f);
-	Vector3D esquina3(-15.0f, 0.0f, -25.0f);
-	Vector3D esquina4(15.0f, 0.0f, -25.0f);
-	Vector3D canastaPos(0.0f, 3.05f, -23.0f);
-
-	
-	
-	//CONFETI
-	/*Vector3D posConfetiIzq = canastaPos + Vector3D(-10.0f, -1.0f, 0.0f);
-	Vector3D posConfetiDer =  canastaPos + Vector3D(10.0f, -1.0f, 0.0f);
-
-	confetiIzq = new ParticleGen(posConfetiIzq,Vector3D(0, 5, 0),Vector3D(2,2, 2),0.98f,2.0f,40.0f,1.0f,Vector4(1, 1, 0, 1),0.3f,1.0f,fs, TDist::NORMAL);
-
-	confetiDer = new ParticleGen(posConfetiDer,Vector3D(0, 5, 0),Vector3D(2, 2, 2),0.98f,2.0f,40.0f,1.0f,Vector4(1, 0, 1, 1),0.3f,1.0f,fs, TDist::UNIFORME);
-	
-	confetiDer->addForce(torbellinoGen);
-	confetiIzq->addForce(torbellinoGen);
-
-	listaGenParticles->addParticle(confetiIzq);
-	listaGenParticles->addParticle(confetiDer);*/
+	//SUELO
 	PxTransform poseSuelo(PxVec3(0, -1, 0));
 	PxRigidStatic* suelo = gPhysics->createRigidStatic(poseSuelo);
 
-	PxShape* shapeSuelo = CreateShape(PxBoxGeometry(50, 1, 50)); // GRAN PLANO
+	PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 1, 100));
 	suelo->attachShape(*shapeSuelo);
 
 	gScene->addActor(*suelo);
 
 	new RenderItem(shapeSuelo, suelo, Vector4(0.3, 0.3, 0.3, 1.0));
-	
-	PxMaterial* matGoma = gPhysics->createMaterial(0.8f, 0.8f, 0.9f); // rebota
-	PxMaterial* matMadera = gPhysics->createMaterial(0.4f, 0.4f, 0.3f);
-	PxMaterial* matMetal = gPhysics->createMaterial(0.2f, 0.1f, 0.05f);
-	sistemaSolidos->addGenerator(new SolidGen({ 0,10,0 }, 0.5f, matGoma, gPhysics,gScene));
-	sistemaSolidos->addGenerator(new SolidGen({ 2,10,0 }, 1.0f, matMetal, gPhysics,gScene));
 }
 
 
@@ -127,8 +104,10 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	
-	tiroCanasta = new TiroCanasta(fs, listaGenParticles);
+	basketManager = new CanastaManager(gPhysics, gScene);
+	basketManager->addBasket(Vector3D(0.0f, 25.0f, -30.0f));
+
+	tiroCanasta = new TiroCanasta(fs, listaGenParticles, gPhysics,gScene);
 	crearCampo();
 
 	}
@@ -139,6 +118,8 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
+	display_text = "Puntos: " + std::to_string(puntos);
+
 	PX_UNUSED(interactive);
 
 	gScene->simulate(t);
@@ -151,7 +132,11 @@ void stepPhysics(bool interactive, double t)
 	
 	fs->update(t);
 	sistemaSolidos->update(t);
-	
+	if (basketManager->getBaskets().size() > 0 && tiroCanasta->checkScored(basketManager->getBaskets())) {
+		puntos++;
+	}
+
+
 }
 
 // Function to clean data

@@ -1,21 +1,22 @@
 ﻿#pragma once
-#include "PxPhysicsAPI.h"
+#include "PxRigidDynamic.h"
+#include "core.hpp"
+#include <PxPhysicsAPI.h>
 #include "RenderUtils.hpp"
 
 class Solid {
 public:
-    Solid(physx::PxRigidDynamic* body, RenderItem* item)
-        : body(body), renderItem(item) {
-    }
+    Solid(physx::PxTransform t, physx::PxGeometry& geo, Vector3 linear_v, Vector3 ang_v, float masa, Vector4 color, physx::PxPhysics* phys, physx::PxScene* scene, physx::PxVec3 inertia);
+       
 
-    ~Solid() {
-        DeregisterRenderItem(renderItem);
-        body->release();
-    }
-
+    ~Solid();
+    void setVelocity(Vector3 vel) { body->setLinearVelocity(vel); }
     bool isAlive() { return true; }
-
+    physx::PxRigidDynamic* getBody() { return body; }
 private:
     physx::PxRigidDynamic* body;
+    physx::PxShape* shape;
     RenderItem* renderItem;
+    physx::PxScene* gScene;
+
 };

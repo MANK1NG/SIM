@@ -1,6 +1,6 @@
 ﻿#include "tiroCanasta.h"
 #include <iostream>
-TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_):fuerza(0.0f), fuerzaMaxima(60.0f), masFuerza(10.0f), cargando(false), fs(fs_), ps(ps_)
+TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_, physx::PxPhysics* physics_, physx::PxScene* scene_):fuerza(0.0f), fuerzaMaxima(60.0f), masFuerza(10.0f), cargando(false), fs(fs_), ps(ps_), physics(physics_), scene(scene_)
 {
 
 
@@ -41,15 +41,14 @@ void TiroCanasta::soltarDisparo()
 }
 void TiroCanasta::update(double t) {
 	for (auto it = bolas.begin(); it != bolas.end();) {
-		Projectile* p = *it;
-		p->integrate(t);
-		if (!p->isAlive()) {
-			delete p;
+		Solid* s = *it;
+
+		physx::PxTransform pose = s->getBody()->getGlobalPose();
+		if (pose.p.y < -50) {
+			delete s;
 			it = bolas.erase(it);
 		}
-		else {
-			++it;
-		}
+		else ++it;
 	}
 	
 	if (cargando) {
@@ -115,7 +114,7 @@ void TiroCanasta::activarExplosion()
 	}
 
 
-	Projectile* ultBol = bolas.back();
+	/*Projectile* ultBol = bolas.back();
 	Vector3D posBol = ultBol->getPos();
 
 	explosionBol->setCenter(posBol);
@@ -130,7 +129,40 @@ void TiroCanasta::activarExplosion()
 	ps->addParticle(gen);
 	fs->removeForces(ultBol);
 	delete ultBol;
-	bolas.pop_back();
+	bolas.pop_back();*/
+}
+
+bool TiroCanasta::checkScored(const std::list<Canasta*>& canastas)
+{
+	for (auto it = bolas.begin(); it != bolas.end(); ) {
+		Solid* bola = *it;
+
+		physx::PxTransform pose = bola->getBody()->getGlobalPose();
+		Vector3D posBola(pose.p.x, pose.p.y, pose.p.z);
+
+		bool anotada = false;
+
+		for (auto* c : canastas) {
+			Vector3D rimCenter = c->getAro();
+			float radius = c->getAroRadius();
+
+			if ((posBola - rimCenter).module() <= radius) {
+				anotada = true;
+				break;
+			}
+		}
+
+		if (anotada) {
+			delete bola;
+			it = bolas.erase(it);
+			return true;
+		}
+		else {
+			++it;
+		}
+	}
+
+	return false;
 }
 
 void TiroCanasta::disparar()
@@ -152,27 +184,43 @@ void TiroCanasta::crearBola(Vector3D pos, Vector3D dir, float fuerza)
 		tp.masa = 0.5f;
 		tp.color = Vector4(0.4f, 0.7f, 1.0f, 1.0f);
 		tp.tam = 0.1f;
-		tp.velReal =  Vector3D(10, 25, 0);
+		//tp.velReal =  Vector3D(10, 25, 0);
 	}
 	else if (tipoBolaN == 2) {
 		tp.masa = 5.0f;
 		tp.color = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 		tp.tam = 5.0f;
-		tp.velReal = Vector3D(4, 10, 0);
+		//tp.velReal = Vector3D(4, 10, 0);
 	}
 	else {
 		tp.masa = 1.0f;
 		tp.color = Vector4(1.0f, 0.7f, 0.2f, 1.0f);
-		tp.tam = 1.0f;
-		tp.velReal = Vector3D(8, 20, 0);
+		tp.tam =1.0f;
+		//tp.velReal = Vector3D(8, 20, 0);
 	}
-	Vector3D spawnPos = pos + dir.multEscalar(3.0f);
-	Vector3D vel = dir.multEscalar(fuerza);
-	
-	Projectile* p = new Projectile(spawnPos, 0.99f, tp.masa, tp.velReal, vel, tp.color,tp.tam);
-	fs->addForce(p,gravityGen);
+	physx::PxSphereGeometry geo(tp.tam);
+	physx::PxTransform t(physx::PxVec3(pos.getX(), pos.getY(), pos.getZ()));
+	float anguloVertical = physx::PxPi / 4.0f;
+	Vector3D dirParabolica = dir;
+	dirParabolica.setY(sinf(anguloVertical));
+	dirParabolica.normalice();
+	Vector3D linVel = dirParabolica.multEscalar(fuerza);
+	Vector3 linVelV = { linVel.getX(),linVel.getY(),linVel.getZ() };
+	Solid* bola = new Solid(
+		t,
+		geo,
+		linVelV,
+		Vector3(0, 0, 0),
+		tp.masa,
+		tp.color,
+		physics,
+		scene,
+		{ 25,25,25 }
+	);
+
+	bolas.push_back(bola);
+	/*fs->addForce(p, gravityGen);
 	fs->addForce(p, zonaViento);
-	fs->addForce(p, explosionBol);
-	bolas.push_back(p);
+	fs->addForce(p, explosionBol);*/
 
 }

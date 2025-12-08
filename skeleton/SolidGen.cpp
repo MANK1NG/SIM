@@ -35,5 +35,5 @@ void SolidGen::generateSolid()
 
     RenderItem* item = new RenderItem(shape, body, Vector4(0, 1, 0, 1));
 
-    solidos.push_back(new Solid(body, item));
+    //solidos.push_back(new Solid(body, item));
 }

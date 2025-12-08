@@ -256,6 +256,8 @@
     <ClCompile Include="AnchoredSpringForceGen.cpp" />
     <ClCompile Include="BuoyancyForceGen.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="Canasta.cpp" />
+    <ClCompile Include="CanastaManager.cpp" />
     <ClCompile Include="ExplosionForce.cpp" />
     <ClCompile Include="ForceSys.cpp" />
     <ClCompile Include="GravityForceGen.cpp" />
@@ -267,6 +269,7 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="Solid.cpp" />
     <ClCompile Include="SolidGen.cpp" />
     <ClCompile Include="SolidSys.cpp" />
     <ClCompile Include="SpringForceGen.cpp" />
@@ -279,6 +282,8 @@
     <ClInclude Include="AnchoredSpringForceGen.h" />
     <ClInclude Include="BuoyancyForceGen.h" />
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="Canasta.h" />
+    <ClInclude Include="CanastaManager.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="ExplosionForce.h" />
     <ClInclude Include="ForceGen.h" />

@@ -1,5 +1,5 @@
-#pragma once
-#include "Projectile.h"
+﻿#pragma once
+#include <PxPhysicsAPI.h>
 #include "vector3D.h"
 #include "GravityForceGen.h"
 #include "ZonaDeVientoGen.h"
@@ -10,11 +10,14 @@
 #include <vector>
 #include "ParticleGen.h"
 #include "ParticleSys.h"
+#include "Solid.h"
+#include "Canasta.h"
+
 
 class TiroCanasta
 {
 public:
-	TiroCanasta(ForceSys* fs_, ParticleSys* ps_);
+	TiroCanasta(ForceSys* fs_, ParticleSys* ps_, physx::PxPhysics* physics, physx::PxScene* scene);
 	~TiroCanasta();
 	void cargarDisparo();
 	void soltarDisparo();
@@ -24,7 +27,11 @@ public:
 	void cambiarBola(int cb);
 	void activarExplosion();
 	ZonaDeVientoGen* getZonaViento() { return zonaViento; };
+	bool checkScored(const std::list<Canasta*>& canastas);
+
 private:
+	physx::PxPhysics* physics;
+	physx::PxScene* scene;
 	struct tipoBola {
 		float masa;
 		Vector4 color;
@@ -43,7 +50,7 @@ private:
 
 	GravityForceGen* gravityGen = new GravityForceGen(Vector3D(0, -10, 0));
 	ExplosionForce* explosionBol;
-	std::vector<Projectile*> bolas;
+	std::vector<Solid*> bolas;
 	std::vector<ParticleGen*> generadoresBolas;
 	ZonaDeVientoGen* zonaViento;
 	RenderItem* rZonaViento;

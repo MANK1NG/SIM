@@ -26,6 +26,9 @@
     <ClCompile Include="BuoyancyForceGen.cpp" />
     <ClCompile Include="SolidSys.cpp" />
     <ClCompile Include="SolidGen.cpp" />
+    <ClCompile Include="Solid.cpp" />
+    <ClCompile Include="Canasta.cpp" />
+    <ClCompile Include="CanastaManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -56,6 +59,8 @@
     <ClInclude Include="SolidSys.h" />
     <ClInclude Include="SolidGen.h" />
     <ClInclude Include="Solid.h" />
+    <ClInclude Include="Canasta.h" />
+    <ClInclude Include="CanastaManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

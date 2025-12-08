@@ -1,13 +1,14 @@
 
-Cambiar las pelotas a solidoRigido
-Hacer canasta con solido rigido
-Puntos/Tiempo
-detectar canasta
-Arreglar disparo que sea mas real
-Efectos cpn el transcurso del tiempo --- Viento
+Cambiar las pelotas a solidoRigido////////////////////////////////////////////////////
+Hacer canasta con solido rigido//////////////////////////////////
+detectar canasta////////////////////////
 canasta en diferentes posiciones si encesta o dependiendo del tiempo
 Efectos de canasta que se mueva
-hacer campo SolidoRigido
 Canasta que suba y baja con muelles
+Puntos/Tiempo//////////////////////////////
+
+Arreglar disparo que sea mas real---------------------
+Efectos cpn el transcurso del tiempo --- Viento
+hacer campo SolidoRigido
 Al encestar efecto de explosión
-Ciclo del juego-> botón empezar/ Pantalla final con los puntos totales
+Ciclo del juego-> botón empezar/ Pantalla final con los puntos totales// quiza guardarlos en un txt para que se guarde el top de puntos
