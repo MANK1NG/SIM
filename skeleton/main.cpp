@@ -59,6 +59,8 @@ CanastaManager* basketManager = nullptr;
 int puntos = 0;
 std::string display_text_puntos = "";
 std::string display_text_tiempo = "";
+std::string display_text_title= "";
+std::string display_text_subtitle="";
 
 GameState gameState = STATE_MENU;
 double tiempoJuego = 30.0;
@@ -109,7 +111,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	basketManager = new CanastaManager(gPhysics, gScene);
-	basketManager->addBasket(Vector3D(0.0f, 25.0f, -30.0f));
+	basketManager->addBasket();
 
 	tiroCanasta = new TiroCanasta(fs, listaGenParticles, gPhysics,gScene);
 	crearCampo();
@@ -122,7 +124,17 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
+	
+	
+
+	PX_UNUSED(interactive);
+
+	gScene->simulate(t);
+	gScene->fetchResults(true);
 	if (gameState == STATE_GAME) {
+		display_text_title = "";
+		display_text_subtitle = "";
+
 		tiempoJuego -= t;
 		display_text_puntos = "Puntos: " + std::to_string(puntos);
 		display_text_tiempo = "Tiempo: " + std::to_string((int)tiempoJuego);
@@ -133,14 +145,6 @@ void stepPhysics(bool interactive, double t)
 
 			return;
 		}
-	}
-	
-
-	PX_UNUSED(interactive);
-
-	gScene->simulate(t);
-	gScene->fetchResults(true);
-	if (gameState == STATE_GAME) {
 		tiroCanasta->update(t);
 		tiroCanasta->renderBarraCarga();
 
@@ -148,12 +152,32 @@ void stepPhysics(bool interactive, double t)
 
 		fs->update(t);
 		sistemaSolidos->update(t);
-		if (basketManager->getBaskets().size() > 0 && tiroCanasta->checkScored(basketManager->getBaskets())) {
-			puntos++;
+		if (basketManager->getBaskets().size() > 0) {
+			Canasta* scoredCanasta = tiroCanasta->checkScored(basketManager->getBaskets());
+
+			if (scoredCanasta != nullptr) {
+				
+				basketManager->removeBasket(scoredCanasta);
+				basketManager->addBasket();
+
+				puntos++;
+			}
 		}
 	}
-	
-
+	if (gameState == STATE_MENU) {
+		display_text_title = "MI SUPER JUEGO";
+		display_text_subtitle = "Pulsa E para empezar";
+	}
+	if (gameState == STATE_LOSE) {
+		display_text_title = "GAME OVER";
+		display_text_subtitle = "Pulsa E para volver al menú";
+		display_text_puntos = "Puntos finales: " + std::to_string(puntos);
+	}
+	if (gameState == STATE_WIN) {
+		display_text_title = "¡HAS GANADO!";
+		display_text_subtitle = "Pulsa E para volver al menu";
+		display_text_puntos = "Puntos finales: " + std::to_string(puntos);
+	}
 
 }
 

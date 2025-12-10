@@ -45,6 +45,7 @@ void TiroCanasta::update(double t) {
 
 		physx::PxTransform pose = s->getBody()->getGlobalPose();
 		if (pose.p.y < -50) {
+			fs->removeForces(s->getBody());
 			delete s;
 			it = bolas.erase(it);
 		}
@@ -107,16 +108,22 @@ void TiroCanasta::cambiarBola(int cb)
 	tipoBolaN = cb;
 }
 
-void TiroCanasta::activarExplosion()
+void TiroCanasta::activarExplosion(Solid* target)
 {
 	if (bolas.empty()) {
 		return;
 	}
 
 
-	/*Projectile* ultBol = bolas.back();
-	Vector3D posBol = ultBol->getPos();
+	if (target == nullptr) {
+		target = bolas.back();
+	}
+	auto it = std::find(bolas.begin(), bolas.end(), target);
+	if (it == bolas.end()) { return; }
+	Solid* ultBol = *it;
 
+	physx::PxTransform pose = ultBol->getBody()->getGlobalPose();
+	Vector3D posBol(pose.p.x, pose.p.y, pose.p.z);
 	explosionBol->setCenter(posBol);
 	explosionBol->explode();
 
@@ -127,42 +134,36 @@ void TiroCanasta::activarExplosion()
 
 
 	ps->addParticle(gen);
-	fs->removeForces(ultBol);
-	delete ultBol;
-	bolas.pop_back();*/
+
 }
 
-bool TiroCanasta::checkScored(const std::list<Canasta*>& canastas)
+Canasta* TiroCanasta::checkScored(const std::list<Canasta*>& canastas)
 {
-	for (auto it = bolas.begin(); it != bolas.end(); ) {
+	for (auto it = bolas.begin(); it != bolas.end(); ++it) {
 		Solid* bola = *it;
 
 		physx::PxTransform pose = bola->getBody()->getGlobalPose();
 		Vector3D posBola(pose.p.x, pose.p.y, pose.p.z);
-
-		bool anotada = false;
 
 		for (auto* c : canastas) {
 			Vector3D rimCenter = c->getAro();
 			float radius = c->getAroRadius();
 
 			if ((posBola - rimCenter).module() <= radius) {
-				anotada = true;
-				break;
+				
+				activarExplosion();
+				fs->removeForces(bola->getBody());
+
+				it = bolas.erase(it);
+				delete bola;
+				return c;
+
 			}
 		}
-
-		if (anotada) {
-			delete bola;
-			it = bolas.erase(it);
-			return true;
-		}
-		else {
-			++it;
-		}
+		
 	}
 
-	return false;
+	return nullptr;
 }
 
 void TiroCanasta::disparar()
@@ -200,27 +201,19 @@ void TiroCanasta::crearBola(Vector3D pos, Vector3D dir, float fuerza)
 	}
 	physx::PxSphereGeometry geo(tp.tam);
 	physx::PxTransform t(physx::PxVec3(pos.getX(), pos.getY(), pos.getZ()));
-	float anguloVertical = physx::PxPi / 4.0f;
+
 	Vector3D dirParabolica = dir;
-	dirParabolica.setY(sinf(anguloVertical));
-	dirParabolica.normalice();
+	float boostY = 0.5f;
+	dirParabolica.setY(dirParabolica.getY() + boostY);
+	dirParabolica = dirParabolica.normalice();
+
 	Vector3D linVel = dirParabolica.multEscalar(fuerza);
-	Vector3 linVelV = { linVel.getX(),linVel.getY(),linVel.getZ() };
-	Solid* bola = new Solid(
-		t,
-		geo,
-		linVelV,
-		Vector3(0, 0, 0),
-		tp.masa,
-		tp.color,
-		physics,
-		scene,
-		{ 25,25,25 }
-	);
 
+	Vector3 linVelV = { linVel.getX(), linVel.getY(), linVel.getZ() };
+	Vector3 angVel = { 0, 10.0f, 0 };
+
+	Solid* bola = new Solid(t, geo, linVelV, angVel, tp.masa, tp.color, physics, scene, { 0.2f,0.2f,0.2f });
 	bolas.push_back(bola);
-	/*fs->addForce(p, gravityGen);
-	fs->addForce(p, zonaViento);
-	fs->addForce(p, explosionBol);*/
 
+	fs->addForce(bola->getBody(), explosionBol);
 }

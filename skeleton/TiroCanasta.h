@@ -25,9 +25,9 @@ public:
 	void update(double t);
 	void renderBarraCarga();
 	void cambiarBola(int cb);
-	void activarExplosion();
+	void activarExplosion(Solid* target = nullptr);
 	ZonaDeVientoGen* getZonaViento() { return zonaViento; };
-	bool checkScored(const std::list<Canasta*>& canastas);
+	Canasta* checkScored(const std::list<Canasta*>& canastas);
 
 private:
 	physx::PxPhysics* physics;

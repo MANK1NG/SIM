@@ -290,6 +290,18 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 	drawText(display_text_puntos, 0, 0);
 	drawText(display_text_tiempo, 0, 20);
+	int w = glutGet(GLUT_WINDOW_WIDTH);
+	int h = glutGet(GLUT_WINDOW_HEIGHT);
+	if(!display_text_subtitle.empty()) {
+		int subX = w / 2 - (int)(display_text_subtitle.length() * 6);
+		int subY = (int)(h * 0.55f);
+		drawBigText(display_text_subtitle, subX, subY);
+	}
+	if (!display_text_title.empty()) {
+		float titleX = w/2-(int)(display_text_title.length() * 6);
+		float titleY = h * 0.65f;
+		drawBigText(display_text_title, titleX, titleY);
+	}
 	// Setup camera
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -404,6 +416,35 @@ void drawText(const std::string& text, int x, int y)
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixd(matrix);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void drawBigText(const std::string& text, int x, int y)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	double matrix[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, matrix);
+
+	int w = glutGet(GLUT_WINDOW_WIDTH);
+	int h = glutGet(GLUT_WINDOW_HEIGHT);
+	glLoadIdentity();
+	glOrtho(0, w, 0, h, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glRasterPos2i(x, y);
+
+	void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+	for (char c : text) glutBitmapCharacter(font, c);
+
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixd(matrix);
+	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 }
 

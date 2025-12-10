@@ -7,7 +7,7 @@ public:
     CanastaManager(PxPhysics* physics, PxScene* scene);
     ~CanastaManager();
 
-    Canasta* addBasket(const Vector3D& pos, const Vector4& colorBoard = Vector4(1, 1, 1, 1), const Vector4& colorRim = Vector4(1, 0, 0, 1));
+    void addBasket(const Vector4& colorBoard = Vector4(1, 1, 1, 1), const Vector4& colorRim = Vector4(1, 0, 0, 1));
     void removeBasket(Canasta* b);
 
     void clearB();
@@ -16,7 +16,7 @@ public:
 
     void update(float dt);
     void render();
-
+    float RandomFloat(float min, float max);
     const std::list<Canasta*>& getBaskets() const { return baskets; }
 
 private:

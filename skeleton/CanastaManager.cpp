@@ -8,11 +8,15 @@ CanastaManager::~CanastaManager()
     baskets.clear();
 }
 
-Canasta* CanastaManager::addBasket(const Vector3D& pos, const Vector4& colorBoard, const Vector4& colorRim)
+void CanastaManager::addBasket( const Vector4& colorBoard, const Vector4& colorRim)
 {
+    float x = RandomFloat(-15.0, 15.0);
+    float y = RandomFloat(10.0, 30.0);
+    float z = -30;
+    Vector3D pos = { x, y, z };
     Canasta* b = new Canasta(physics, scene, pos, colorBoard, colorRim);
     baskets.push_back(b);
-    return b;
+    
 }
 
 void CanastaManager::removeBasket(Canasta* b)
@@ -48,4 +52,9 @@ void CanastaManager::render()
 {
     for (auto* b : baskets)
         b->render();
+}
+
+float CanastaManager::RandomFloat(float min, float max)
+{
+    return min + (float) (rand()) / (float) (RAND_MAX / (max - min));
 }

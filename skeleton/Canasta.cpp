@@ -2,7 +2,11 @@
 Canasta::Canasta(PxPhysics* physics_, PxScene* scene_, const Vector3D& pos, const Vector4& colorBoard, const Vector4& colorRim) : physics(physics_), scene(scene_)
 {
     PxMaterial* material = physics->createMaterial(0.5f, 0.5f, 0.5f);
+    
     PxVec3 aux = { pos.getX(),pos.getY(),pos.getZ() };
+    actors.clear();
+    shapes.clear();
+    renderItems.clear();
     actors.push_back(physics->createRigidStatic(PxTransform(PxVec3(5, -5, 6) + aux)));
     PxShape* shape = actors[0]->createShape(PxBoxGeometry(0.5f, 1, 5), *material);
     scene->addActor(*actors[0]);
@@ -38,20 +42,30 @@ Canasta::Canasta(PxPhysics* physics_, PxScene* scene_, const Vector3D& pos, cons
 
 Canasta::~Canasta()
 {
-    for (auto r : renders) {
+    for (auto* r : renderItems) {
         if (r) DeregisterRenderItem(r);
     }
-    renders.clear();
-    for (auto s : shapes) {
-        actor->detachShape(*s);
+    renderItems.clear();
 
-    }
-    scene->removeActor(*actor);
-    actor->release();
-    for (auto s : shapes) {
-        s->release();
+    for (size_t i = 0; i < shapes.size() && i < actors.size(); ++i) {
+        PxShape* s = shapes[i];
+        if (s) {
+            if (actors[i]) {
+                
+                actors[i]->detachShape(*s);
+               
+            }
+            s->release();
+        }
     }
     shapes.clear();
+
+    for (auto* a : actors) {
+        if (!a) continue;
+         scene->removeActor(*a);
+        a->release();
+    }
+    actors.clear();
 }
 
 void Canasta::setPosition(const Vector3D& pos)
@@ -84,7 +98,7 @@ Vector3D Canasta::getAro()
 {
     PxVec3 pos = actors[0]->getGlobalPose().p;
 
-    return Vector3D(pos.x-5.0f, pos.y, pos.z);
+    return Vector3D(pos.x-5.0f, pos.y-3.0f, pos.z);
 }
 
 float Canasta::getAroRadius()

@@ -2,14 +2,20 @@
 Cambiar las pelotas a solidoRigido////////////////////////////////////////////////////
 Hacer canasta con solido rigido//////////////////////////////////
 detectar canasta////////////////////////
-canasta en diferentes posiciones si encesta o dependiendo del tiempo
+canasta en diferentes posiciones si encesta o dependiendo del tiempo///////////////////////////////////
+Puntos/Tiempo//////////////////////////////
+Arreglar disparo que sea mas real///////////////////////////////////////////////////
+Al encestar efecto de explosión///////////////////////////////////////
+Sistema de mensajes que se envie Victria, Derrota,Pntll Inicio////////////////////////////////
+Ciclo del juego-> botón empezar/ Pantalla final con los puntos totales// quiza guardarlos en un txt para que se guarde el top de puntos//////////////////////////////////
+
+
+
+
+cambiar color campo SolidoRigido
+
+
 Efectos de canasta que se mueva
 Canasta que suba y baja con muelles
-Puntos/Tiempo//////////////////////////////
 
-Arreglar disparo que sea mas real---------------------
 Efectos cpn el transcurso del tiempo --- Viento
-hacer campo SolidoRigido
-Al encestar efecto de explosión
-Sistema de mensajes que se envie Victria, Derrota,Pntll Inicio
-Ciclo del juego-> botón empezar/ Pantalla final con los puntos totales// quiza guardarlos en un txt para que se guarde el top de puntos

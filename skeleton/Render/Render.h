@@ -49,6 +49,8 @@
 
 extern std::string display_text_puntos;
 extern std::string display_text_tiempo;
+extern std::string display_text_title;
+extern std::string display_text_subtitle;
 namespace Snippets
 {
 void setupDefaultWindow(const char* name);
@@ -59,6 +61,7 @@ void renderShape(const physx::PxShape& shape, const physx::PxTransform& transfor
 void renderActors(physx::PxRigidActor** actors, const physx::PxU32 numActors, bool shadows = false, const physx::PxVec4 & color = physx::PxVec4(0.0f, 0.75f, 0.0f, 1.0f));
 void finishRender();
 void drawText(const std::string& text, int x, int y);
+void drawBigText(const std::string& text, int x, int y);
 }
 
 #define MAX_NUM_ACTOR_SHAPES 128
