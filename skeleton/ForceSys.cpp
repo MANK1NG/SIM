@@ -66,6 +66,7 @@ void ForceSys::update(float dt) {
             if (fg->getActivo()) {
                 physx::PxVec3 fuerza = fg->getForce(s);
                  s->addForce(fuerza);
+                 fg->updateForce(s, dt);
                 fg->update(dt);
             }
         }

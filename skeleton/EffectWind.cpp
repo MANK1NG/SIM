@@ -1,4 +1,5 @@
 ﻿#include "EffectWind.h"
+#include <iostream>
 
 EffectWind::EffectWind(TiroCanasta* tc)
 	:tiro(tc)
@@ -8,6 +9,7 @@ EffectWind::EffectWind(TiroCanasta* tc)
 void EffectWind::onEnter()
 {
 	tiro->getZonaViento()->toggleActivo();
+
 }
 
 void EffectWind::onExit()

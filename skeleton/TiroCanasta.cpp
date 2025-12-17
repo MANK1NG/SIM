@@ -12,7 +12,7 @@ TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_, physx::PxPhysics* phys
 	float radio = 5.0f;
 	poseZonaViento = physx::PxTransform(physx::PxVec3(zona.getX(), zona.getY(), zona.getZ()));
 	zonaViento = new ZonaDeVientoGen(viento, 0.2f, 0.05f, zona, radio);
-	//rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
+	rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
 
 	//Explosion
 	explosionBol = new ExplosionForce(Vector3D(0, 0, 0), 15.0f, 150000.0f, 1.0f);
@@ -43,8 +43,9 @@ void TiroCanasta::update(double t) {
 	for (auto it = bolas.begin(); it != bolas.end();) {
 		Solid* s = *it;
 
-		physx::PxTransform pose = s->getBody()->getGlobalPose();
-		if (pose.p.y < -50) {
+		s->update(t);
+		if (!s->isAlive())
+		{
 			fs->removeForces(s->getBody());
 			delete s;
 			it = bolas.erase(it);
@@ -170,38 +171,42 @@ void TiroCanasta::disparar()
 void TiroCanasta::crearBola(Vector3D pos, Vector3D dir, float fuerza)
 {
 	if (tipoBolaN == 3) {
-		tp.masa = 0.5f;
+		tp.masa = 0.75f;
 		tp.color = Vector4(0.4f, 0.7f, 1.0f, 1.0f);
-		tp.tam = 0.1f;
+		tp.tam = 0.75f;
 		//tp.velReal =  Vector3D(10, 25, 0);
 	}
 	else if (tipoBolaN == 2) {
-		tp.masa = 5.0f;
+		tp.masa = 3.0f;
 		tp.color = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
-		tp.tam = 5.0f;
+		tp.tam = 3.0f;
 		//tp.velReal = Vector3D(4, 10, 0);
 	}
 	else {
-		tp.masa = 1.0f;
+		tp.masa = 1.5f;
 		tp.color = Vector4(1.0f, 0.7f, 0.2f, 1.0f);
-		tp.tam =1.0f;
+		tp.tam =1.5f;
 		//tp.velReal = Vector3D(8, 20, 0);
 	}
 	physx::PxSphereGeometry geo(tp.tam);
 	physx::PxTransform t(physx::PxVec3(pos.getX(), pos.getY(), pos.getZ()));
 
 	Vector3D dirParabolica = dir;
-	float boostY = 0.5f;
-	dirParabolica.setY(dirParabolica.getY() + boostY);
+	//float boostY = 0.5f;
+	//dirParabolica.setY(dirParabolica.getY() + boostY);
 	dirParabolica = dirParabolica.normalice();
 
 	Vector3D linVel = dirParabolica.multEscalar(fuerza);
 
-	Vector3 linVelV = { linVel.getX(), linVel.getY(), linVel.getZ() };
+	Vector3 linVelV = { linVel.getX(), linVel.getY()+fuerza*0.2f, linVel.getZ() };
 	Vector3 angVel = { 0, 10.0f, 0 };
 
-	Solid* bola = new Solid(t, geo, linVelV, angVel, tp.masa, tp.color, physics, scene, { 0.2f,0.2f,0.2f });
+
+	float I = 0.4f * tp.masa * tp.tam * tp.tam;
+
+	Solid* bola = new Solid(t, geo, linVelV, angVel, tp.masa, tp.color, physics, scene, { I,I,I });
 	bolas.push_back(bola);
 
 	fs->addForce(bola->getBody(), explosionBol);
+	fs->addForce(bola->getBody(), zonaViento);
 }

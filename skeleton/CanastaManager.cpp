@@ -12,7 +12,7 @@ void CanastaManager::addBasket( const Vector4& colorBoard, const Vector4& colorR
 {
     float x = RandomFloat(-15.0, 15.0);
     float y = RandomFloat(10.0, 30.0);
-    float z = -30;
+    float z = RandomFloat(-5,-30);
     Vector3D pos = { x, y, z };
     Canasta* b = new Canasta(physics, scene, pos, colorBoard, colorRim);
     baskets.push_back(b);

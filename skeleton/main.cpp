@@ -31,6 +31,7 @@
 #include "EffectWind.h"
 #include "EffectBolaPequeña.h"
 #include "EfectoBolaGrande.h"
+#include "EfectoMuelle.h"
 
 using namespace physx;
 
@@ -82,27 +83,31 @@ void crearCampo() {
 	GetCamera()->setDir(direccion);
 
 	//SUELO
+
 	PxTransform poseSuelo(PxVec3(0, -1, 0));
 	PxRigidStatic* suelo = gPhysics->createRigidStatic(poseSuelo);
-
-	PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 1, 100));
+	PxMaterial* material = gPhysics->createMaterial(1.0f, 1.0f, 0.0f);
+	PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 1, 100), material);
 	suelo->attachShape(*shapeSuelo);
 
 	gScene->addActor(*suelo);
 
-	new RenderItem(shapeSuelo, suelo, Vector4(1, 1, 0, 1.0));
+	new RenderItem(shapeSuelo, suelo, Vector4(1, 1, 1.0, 1.0));
+
+
 }
 void crearEfectos() {
 	effectManager = new GameEffectManager(10.0f);
-	effectManager->addEffect(new EffectNormal(tiroCanasta, basketManager, sistemaSolidos));
+	//effectManager->addEffect(new EffectNormal(tiroCanasta, basketManager, sistemaSolidos));
 
-	effectManager->addEffect(new EffectBasketLado(basketManager));
+	//effectManager->addEffect(new EffectBasketLado(basketManager));
 	
 	effectManager->addEffect(new EffectWind(tiroCanasta));
 
-	effectManager->addEffect(new EffectBolaPequeña(tiroCanasta));
+	//effectManager->addEffect(new EffectBolaPequeña(tiroCanasta));
 
-	effectManager->addEffect(new EfectoBolaGrande(tiroCanasta));
+	//effectManager->addEffect(new EfectoBolaGrande(tiroCanasta));
+	//effectManager->addEffect(new EfectoMuelle(basketManager, fs));
 	effectManager->start();
 }
 
@@ -133,6 +138,7 @@ void initPhysics(bool interactive)
 	basketManager->addBasket();
 
 	tiroCanasta = new TiroCanasta(fs, listaGenParticles, gPhysics,gScene);
+	tiroCanasta->getZonaViento()->toggleActivo();
 	crearCampo();
 	crearEfectos();
 	}
@@ -170,7 +176,7 @@ void stepPhysics(bool interactive, double t)
 		tiroCanasta->renderBarraCarga();
 
 		listaGenParticles->update(t);
-
+		basketManager->update(t);
 		fs->update(t);
 		sistemaSolidos->update(t);
 		if (basketManager->getBaskets().size() > 0) {
@@ -186,7 +192,7 @@ void stepPhysics(bool interactive, double t)
 		}
 	}
 	if (gameState == STATE_MENU) {
-		display_text_title = "MI SUPER JUEGO";
+		display_text_title = "BALONTIEMPO";
 		display_text_subtitle = "Pulsa E para empezar";
 	}
 	if (gameState == STATE_LOSE) {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ForceGen.h"
 class ZonaDeVientoGen: public ForceGen
 {
@@ -10,6 +10,6 @@ private:
 	float radio;
 public:
 	ZonaDeVientoGen(Vector3D v, float k1_, float k2_, Vector3D c, float r);
-	virtual void updateForce(Particle* p, double t) override;
+	virtual void updateForce(physx::PxRigidDynamic* s, double dt) override;
 };
 

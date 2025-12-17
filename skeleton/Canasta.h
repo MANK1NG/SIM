@@ -3,6 +3,7 @@
 #include "vector3D.h"
 #include "RenderUtils.hpp"
 #include <vector>
+#include "Particle.h"
 
 using namespace physx;
 
@@ -19,7 +20,7 @@ public:
     PxRigidActor* getActor() const { return actor; }
     Vector3D getAro();
     float getAroRadius();
-
+    Particle* getVolante() { return volante; }
 private:
     PxPhysics* physics = nullptr;
     PxScene* scene = nullptr;
@@ -30,4 +31,6 @@ private:
     PxVec3 initPos;
     std::vector<PxRigidStatic*> actors;
     std::vector<RenderItem*> renderItems;
+    Particle* volante = nullptr;
+    std::vector<Vector3D> offsets;
 };

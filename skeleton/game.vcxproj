@@ -259,6 +259,7 @@
     <ClCompile Include="Canasta.cpp" />
     <ClCompile Include="CanastaManager.cpp" />
     <ClCompile Include="EfectoBolaGrande.cpp" />
+    <ClCompile Include="EfectoMuelle.cpp" />
     <ClCompile Include="EffectBasketLado.cpp" />
     <ClCompile Include="EffectBolaPequeña.cpp" />
     <ClCompile Include="EffectNormal.cpp" />
@@ -292,6 +293,7 @@
     <ClInclude Include="CanastaManager.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="EfectoBolaGrande.h" />
+    <ClInclude Include="EfectoMuelle.h" />
     <ClInclude Include="EffectBasketLado.h" />
     <ClInclude Include="EffectBolaPequeña.h" />
     <ClInclude Include="EffectNormal.h" />
