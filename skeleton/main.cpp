@@ -25,6 +25,13 @@
 #include "CanastaManager.h"
 #include "GameState.h"
 
+#include "GameEffectManager.h"
+#include "EffectNormal.h"
+#include "EffectBasketLado.h"
+#include "EffectWind.h"
+#include "EffectBolaPequeña.h"
+#include "EfectoBolaGrande.h"
+
 using namespace physx;
 
 PxDefaultAllocator		gAllocator;
@@ -64,7 +71,7 @@ std::string display_text_subtitle="";
 
 GameState gameState = STATE_MENU;
 double tiempoJuego = 30.0;
-
+GameEffectManager* effectManager = nullptr;
 void crearCampo() {
 	//CAMARA
 	PxVec3 canastaPosPx(0.0f, 20.0f, -30.0f);
@@ -85,7 +92,19 @@ void crearCampo() {
 
 	new RenderItem(shapeSuelo, suelo, Vector4(1, 1, 0, 1.0));
 }
+void crearEfectos() {
+	effectManager = new GameEffectManager(10.0f);
+	effectManager->addEffect(new EffectNormal(tiroCanasta, basketManager, sistemaSolidos));
 
+	effectManager->addEffect(new EffectBasketLado(basketManager));
+	
+	effectManager->addEffect(new EffectWind(tiroCanasta));
+
+	effectManager->addEffect(new EffectBolaPequeña(tiroCanasta));
+
+	effectManager->addEffect(new EfectoBolaGrande(tiroCanasta));
+	effectManager->start();
+}
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -115,7 +134,7 @@ void initPhysics(bool interactive)
 
 	tiroCanasta = new TiroCanasta(fs, listaGenParticles, gPhysics,gScene);
 	crearCampo();
-
+	crearEfectos();
 	}
 
 
@@ -145,6 +164,8 @@ void stepPhysics(bool interactive, double t)
 
 			return;
 		}
+		effectManager->update((float)t);
+
 		tiroCanasta->update(t);
 		tiroCanasta->renderBarraCarga();
 
@@ -170,7 +191,7 @@ void stepPhysics(bool interactive, double t)
 	}
 	if (gameState == STATE_LOSE) {
 		display_text_title = "GAME OVER";
-		display_text_subtitle = "Pulsa E para volver al menú";
+		display_text_subtitle = "Pulsa E para volver al menu";
 		display_text_puntos = "Puntos finales: " + std::to_string(puntos);
 	}
 	if (gameState == STATE_WIN) {
@@ -188,7 +209,7 @@ void cleanupPhysics(bool interactive)
 
 	PX_UNUSED(interactive);
 	
-	
+	delete effectManager;
 	delete tiroCanasta;
 	for (auto c : campo) {
 		RegisterRenderItem(c);
@@ -221,6 +242,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		}
 		else if (gameState == STATE_WIN || gameState == STATE_LOSE) {
 			gameState = STATE_MENU;
+			effectManager->estadoNormal();
 		}
 		break;
 	default:
@@ -229,24 +251,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	if (gameState == STATE_GAME) {
 		switch (toupper(key))
 		{
-		case '1':
-			tiroCanasta->cambiarBola(1);
-			break;
-		case '2':
-		{
-			tiroCanasta->cambiarBola(2);
-
-			break;
-		}case '3':
-			tiroCanasta->cambiarBola(3);
-			break;
 		case ' ':
 
 			tiroCanasta->cargarDisparo();
 			break;
-		case '4':
-			tiroCanasta->activarExplosion();
-			break;
+		
+			
 		case 'T':
 			confetiDer->togglePausar();
 			confetiIzq->togglePausar();

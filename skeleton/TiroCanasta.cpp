@@ -110,19 +110,7 @@ void TiroCanasta::cambiarBola(int cb)
 
 void TiroCanasta::activarExplosion(Solid* target)
 {
-	if (bolas.empty()) {
-		return;
-	}
-
-
-	if (target == nullptr) {
-		target = bolas.back();
-	}
-	auto it = std::find(bolas.begin(), bolas.end(), target);
-	if (it == bolas.end()) { return; }
-	Solid* ultBol = *it;
-
-	physx::PxTransform pose = ultBol->getBody()->getGlobalPose();
+	physx::PxTransform pose = target->getBody()->getGlobalPose();
 	Vector3D posBol(pose.p.x, pose.p.y, pose.p.z);
 	explosionBol->setCenter(posBol);
 	explosionBol->explode();
@@ -151,7 +139,7 @@ Canasta* TiroCanasta::checkScored(const std::list<Canasta*>& canastas)
 
 			if ((posBola - rimCenter).module() <= radius) {
 				
-				activarExplosion();
+				activarExplosion(bola);
 				fs->removeForces(bola->getBody());
 
 				it = bolas.erase(it);

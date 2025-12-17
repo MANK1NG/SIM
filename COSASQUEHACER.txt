@@ -17,5 +17,6 @@ cambiar color campo SolidoRigido
 
 Efectos de canasta que se mueva
 Canasta que suba y baja con muelles
-
 Efectos cpn el transcurso del tiempo --- Viento
+Efecto que cambie la bola
+Sistema de solidos rigidos que golpeen a las bolas

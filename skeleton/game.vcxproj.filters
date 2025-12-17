@@ -29,6 +29,12 @@
     <ClCompile Include="Solid.cpp" />
     <ClCompile Include="Canasta.cpp" />
     <ClCompile Include="CanastaManager.cpp" />
+    <ClCompile Include="EffectNormal.cpp" />
+    <ClCompile Include="EffectBasketLado.cpp" />
+    <ClCompile Include="EffectWind.cpp" />
+    <ClCompile Include="EffectBolaPequeña.cpp" />
+    <ClCompile Include="EfectoBolaGrande.cpp" />
+    <ClCompile Include="GameEffectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -62,6 +68,13 @@
     <ClInclude Include="Canasta.h" />
     <ClInclude Include="CanastaManager.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameEffect.h" />
+    <ClInclude Include="EffectNormal.h" />
+    <ClInclude Include="EffectBasketLado.h" />
+    <ClInclude Include="EffectWind.h" />
+    <ClInclude Include="EffectBolaPequeña.h" />
+    <ClInclude Include="EfectoBolaGrande.h" />
+    <ClInclude Include="GameEffectManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

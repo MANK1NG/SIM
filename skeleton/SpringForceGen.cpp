@@ -17,6 +17,6 @@ void SpringForceGenerator::updateForce(Particle* particle,double t)
     const float delta_x = length - _resting_length;
     Vector3D tramite= dir.multEscalar(_k);
 
-    force = tramite.multEscalar(_k);
+    force = tramite.multEscalar(delta_x);
     particle->addForce(force);
 }
