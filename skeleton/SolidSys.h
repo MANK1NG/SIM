@@ -8,6 +8,7 @@ public:
     ~SolidSys();
 
     void addGenerator(SolidGen* sg);
+    void removeGenerator(SolidGen* sg);
     void update(float dt);
 
 private:

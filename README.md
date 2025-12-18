@@ -1,8 +1,6 @@
 # SimulacionFisicaVideojuegos
-Repositorio de las prácticas de la asignatura de Simulación Física de Videojuegos
 
-En la carpeta skeleton estará vuestro código fuente
-
-Necesitaréis además descomprimir el archivo que se indica a continuación en la raíz del repositorio:
-
-Carpetas bin y common https://ucomplutense-my.sharepoint.com/:f:/g/personal/liagar05_ucm_es/ElNxHPmZVj9Ni9-8FKTKp7cBJHAarnL3vvEvG50z0QMrzg
+Manteniendo el espacio -- Cargar disparo (Cuanto más pulses el espacio más fuerza sale la pelota)
+Soltar espacio -- Disparar
+Apretando click izquierdo y moviendo ratón – Movimiento de cámara para poder apuntar
+Pulsando la tecla ‘e’ se avanzará entre menús

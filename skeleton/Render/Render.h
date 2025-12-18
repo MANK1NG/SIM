@@ -51,6 +51,8 @@ extern std::string display_text_puntos;
 extern std::string display_text_tiempo;
 extern std::string display_text_title;
 extern std::string display_text_subtitle;
+extern std::string display_text_effect;
+
 namespace Snippets
 {
 void setupDefaultWindow(const char* name);

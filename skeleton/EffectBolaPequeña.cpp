@@ -9,3 +9,8 @@ void EffectBolaPequeña::onEnter()
 {
 	tiro->cambiarBola(3);
 }
+
+void EffectBolaPequeña::onExit()
+{
+	tiro->cambiarBola(1);
+}

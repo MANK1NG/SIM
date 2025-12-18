@@ -7,15 +7,29 @@ TiroCanasta::TiroCanasta(ForceSys* fs_, ParticleSys* ps_, physx::PxPhysics* phys
 	tipoBolaN = 1;
 
 	//Zona Viento
-	Vector3D viento(10.0f, 0.0f, 0.0f);
-	Vector3D zona(0.0f, 5.0f, -11.5f);
-	float radio = 5.0f;
+	Vector3D viento(5.0f, 0.0f, 0.0f);
+	Vector3D zona(0.0f, 20.0f, 30.0f);
+	float radio = 15.0f;
 	poseZonaViento = physx::PxTransform(physx::PxVec3(zona.getX(), zona.getY(), zona.getZ()));
 	zonaViento = new ZonaDeVientoGen(viento, 0.2f, 0.05f, zona, radio);
-	rZonaViento = new RenderItem(CreateShape(physx::PxSphereGeometry(radio)), &poseZonaViento,Vector4(0.2f, 0.5f, 1.0f, 0.3f));
+
+	Vector3D vientoDir = viento.normalice();
+
+
+	vientoVisual = new ParticleGen(zona,vientoDir.multEscalar(6.0f),Vector3D(1.0f, 0.5f, 1.0f),0.98f,1.5f,radio,radio,Vector4(0.8f, 0.9f, 1.0f, 0.3f),0.3f,0.1f,fs,TDist::UNIFORME);
+
+	vientoVisual->setTiempoMax(-1.0f);
+	ps->addParticle(vientoVisual);
+	vientoVisual->togglePausar();
+	zonaViento->toggleActivo();
+
+
+
 
 	//Explosion
 	explosionBol = new ExplosionForce(Vector3D(0, 0, 0), 15.0f, 150000.0f, 1.0f);
+
+
 }
 
 TiroCanasta::~TiroCanasta()
@@ -142,7 +156,6 @@ Canasta* TiroCanasta::checkScored(const std::list<Canasta*>& canastas)
 				
 				activarExplosion(bola);
 				fs->removeForces(bola->getBody());
-
 				it = bolas.erase(it);
 				delete bola;
 				return c;
@@ -192,15 +205,10 @@ void TiroCanasta::crearBola(Vector3D pos, Vector3D dir, float fuerza)
 	physx::PxTransform t(physx::PxVec3(pos.getX(), pos.getY(), pos.getZ()));
 
 	Vector3D dirParabolica = dir;
-	//float boostY = 0.5f;
-	//dirParabolica.setY(dirParabolica.getY() + boostY);
 	dirParabolica = dirParabolica.normalice();
-
 	Vector3D linVel = dirParabolica.multEscalar(fuerza);
-
 	Vector3 linVelV = { linVel.getX(), linVel.getY()+fuerza*0.2f, linVel.getZ() };
 	Vector3 angVel = { 0, 10.0f, 0 };
-
 
 	float I = 0.4f * tp.masa * tp.tam * tp.tam;
 

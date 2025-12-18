@@ -18,11 +18,11 @@ void EffectBasketLado::update(float t)
 
     Vector3D pos = p->getPos();
 
-    if (pos.getX() >= 40.0f) dir = -1;
-    if (pos.getX() <= -40.0f) dir = 1;
+    if (pos.getX() >= 15.0f) dir = -1;
+    if (pos.getX() <= -15.0f) dir = 1;
 
     p->clearForce();
-    p->addForce(Vector3D(dir * force, 0, 0));
+    p->addForce(Vector3D(dir * force*0.98, 0, 0));
     }
 }
 
@@ -31,5 +31,7 @@ void EffectBasketLado::onExit()
     for (auto* b : basketMgr->getBaskets())
     {
         b->getVolante()->clearForce();
+        b->getVolante()->setVelocity(Vector3D(0, 0, 0));
+
     }
 }

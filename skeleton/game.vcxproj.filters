@@ -36,6 +36,7 @@
     <ClCompile Include="EfectoBolaGrande.cpp" />
     <ClCompile Include="GameEffectManager.cpp" />
     <ClCompile Include="EfectoMuelle.cpp" />
+    <ClCompile Include="EfectoSolidosVoladores.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="EfectoBolaGrande.h" />
     <ClInclude Include="GameEffectManager.h" />
     <ClInclude Include="EfectoMuelle.h" />
+    <ClInclude Include="EfectoSolidosVoladores.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -288,18 +288,23 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 
 	// Display text
 	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-	drawText(display_text_puntos, 0, 0);
-	drawText(display_text_tiempo, 0, 20);
 	int w = glutGet(GLUT_WINDOW_WIDTH);
 	int h = glutGet(GLUT_WINDOW_HEIGHT);
+	drawBigText(display_text_puntos, 10, h - 30);
+	drawBigText(display_text_tiempo, 10, h - 60);
+	drawBigText(display_text_effect, 10, h - 120);
+
+	
 	if(!display_text_subtitle.empty()) {
-		int subX = w / 2 - (int)(display_text_subtitle.length() * 6);
+		int subWidth = display_text_subtitle.length() * 12;
+		int subX = (w - subWidth) / 2;
 		int subY = (int)(h * 0.55f);
 		drawBigText(display_text_subtitle, subX, subY);
 	}
 	if (!display_text_title.empty()) {
-		float titleX = w/2-(int)(display_text_title.length() * 6);
-		float titleY = h * 0.65f;
+		int titleWidth = display_text_title.length() * 12;
+		int titleX = (w - titleWidth) / 2;
+		int titleY = (int)(h * 0.65f);
 		drawBigText(display_text_title, titleX, titleY);
 	}
 	// Setup camera

@@ -27,9 +27,11 @@ public:
 	void cambiarBola(int cb);
 	void activarExplosion(Solid* target = nullptr);
 	ZonaDeVientoGen* getZonaViento() { return zonaViento; };
+	ParticleGen* getVientoVisual() { return vientoVisual; };
 	Canasta* checkScored(const std::list<Canasta*>& canastas);
 
 private:
+	ParticleGen* vientoVisual;
 	physx::PxPhysics* physics;
 	physx::PxScene* scene;
 	struct tipoBola {

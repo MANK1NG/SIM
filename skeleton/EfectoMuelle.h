@@ -12,6 +12,9 @@ public:
     void onEnter() override;
     void onExit() override;
     void update(float t) override;
+    std::string EfectoMuelle::getName() override {
+        return "Muelle";
+    }
 private:
     CanastaManager* basketMgr;
     ForceSys* fs;

@@ -21,6 +21,7 @@ void EfectoMuelle::onExit()
     for (auto& par : springs)
     {
         fs->removeForces(par.first);
+        par.first->setVelocity(Vector3D(0, 0, 0));
         delete par.second.spring;
         delete par.second.anchor;
     }

@@ -5,13 +5,15 @@
 class GameEffectManager
 {
 public:
-	GameEffectManager(float tiempoCambio = 10.0f);
+	GameEffectManager(float tiempoCambio = 20.0f);
 	~GameEffectManager();
 
 	void addEffect(GameEffect* efect);
 	void start();
 	void update(float t);
 	void estadoNormal();
+	GameEffect* getActiveEffect() const { return efectoActual; }
+
 private:
 	std::vector<GameEffect*> effects;
 	GameEffect* efectoActual = nullptr;

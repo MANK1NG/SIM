@@ -6,13 +6,15 @@
 
 class SolidGen {
 public:
-    SolidGen(Vector3D origen, float intervalo, physx::PxMaterial* mat, physx::PxPhysics* physics, physx::PxScene* scene);
+    SolidGen(Vector3D origen,  Vector3D velInicial, float intervalo, physx::PxMaterial* mat, physx::PxPhysics* physics, physx::PxScene* scene);
     ~SolidGen();
 
     void update(float dt);
     void generateSolid();
-
+    void desactivar() { active = false; }
+    bool isActive();
 private:
+    Vector3D vel;
     physx::PxPhysics* physics;
     physx::PxScene* scene;
     float tiempo = 0;
@@ -20,4 +22,5 @@ private:
     Vector3D origen;
     physx::PxMaterial* material;
     std::vector<Solid*> solidos;
+    bool active = true;
 };

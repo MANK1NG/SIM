@@ -7,9 +7,7 @@ GameEffectManager::GameEffectManager(float tiempoCambio)
 
 GameEffectManager::~GameEffectManager()
 {
-	if (efectoActual) {
-		efectoActual->onExit();
-	}
+	
 	for (auto e : effects) {
 		delete e;
 	}

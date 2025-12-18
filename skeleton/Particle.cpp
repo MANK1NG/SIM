@@ -43,3 +43,8 @@ Vector3D Particle::getPos() {
 	Vector3D posActual = { pose.p.x,pose.p.y,pose.p.z };
 	return posActual;
 }
+
+void Particle::setVelocity(const Vector3D& v)
+{
+	vel = v;
+}

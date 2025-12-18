@@ -1,5 +1,6 @@
 ﻿#include "CanastaManager.h"
-CanastaManager::CanastaManager(PxPhysics* physics_, PxScene* scene_):physics(physics_), scene(scene_) {}
+#include <algorithm>
+CanastaManager::CanastaManager(PxPhysics* physics_, PxScene* scene_):physics(physics_), scene(scene_), gen(std::random_device{}()) {}
 
 CanastaManager::~CanastaManager()
 {
@@ -10,9 +11,9 @@ CanastaManager::~CanastaManager()
 
 void CanastaManager::addBasket( const Vector4& colorBoard, const Vector4& colorRim)
 {
-    float x = RandomFloat(-15.0, 15.0);
-    float y = RandomFloat(10.0, 30.0);
-    float z = RandomFloat(-5,-30);
+    float x = RandomFloat(-15.0f, 15.0f);
+    float y = RandomFloat(10.0f, 30.0f);
+    float z = RandomFloat(-5.0f,-30.0f);
     Vector3D pos = { x, y, z };
     Canasta* b = new Canasta(physics, scene, pos, colorBoard, colorRim);
     baskets.push_back(b);
@@ -54,7 +55,9 @@ void CanastaManager::render()
         b->render();
 }
 
-float CanastaManager::RandomFloat(float min, float max)
+float CanastaManager::RandomFloat(float a, float b)
 {
-    return min + (float) (rand()) / (float) (RAND_MAX / (max - min));
+    std::uniform_real_distribution<float> dist((((a) < (b)) ? (a) : (b)), (((a) > (b)) ? (a) : (b)));
+    return dist(gen);
+
 }

@@ -72,18 +72,18 @@ Canasta::~Canasta()
 
 void Canasta::setPosition(const Vector3D& pos)
 {
-    if (!actor) return;
-    PxTransform t = actor->getGlobalPose();
+    if (!actors[4]) return;
+    PxTransform t = actors[4]->getGlobalPose();
     t.p = { pos.getX(),pos.getY(),pos.getZ() };
-    actor->setGlobalPose(t);
+    actors[4]->setGlobalPose(t);
 }
 
 Vector3D Canasta::getPosition() const
 {
-    if (!actor) {
+    if (!actors[4]) {
         return Vector3D({ 0,0,0 });
     }
-    Vector3D aux = { actor->getGlobalPose().p.x,actor->getGlobalPose().p.y,actor->getGlobalPose().p.z };
+    Vector3D aux = { actors[4]->getGlobalPose().p.x,actors[4]->getGlobalPose().p.y,actors[4]->getGlobalPose().p.z };
     return aux;
 }
 

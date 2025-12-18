@@ -2,6 +2,7 @@
 #include <list>
 #include "Canasta.h"
 #include "vector3D.h"
+#include <random>
 class CanastaManager{
 public:
     CanastaManager(PxPhysics* physics, PxScene* scene);
@@ -23,4 +24,6 @@ private:
     PxPhysics* physics = nullptr;
     PxScene* scene = nullptr;
     std::list<Canasta*> baskets;
+    std::mt19937 gen;
+
     };

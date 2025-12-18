@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "vector3D.h"
 #include "RenderUtils.hpp"
 #include "ForceSys.h"
@@ -19,6 +19,8 @@ public:
 	void clearForce() { force = Vector3D(0, 0, 0); }
 	Vector3D getVel()  { return vel; }
 	Vector3D getPos();
+	void setVelocity(const Vector3D& v);
+
 protected:
 	Vector3D pos;
 	Vector3D vel;

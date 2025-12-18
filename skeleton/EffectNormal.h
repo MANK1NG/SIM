@@ -9,6 +9,9 @@ class EffectNormal :
 public:
     EffectNormal(TiroCanasta* tc, CanastaManager* cm, SolidSys* ss);
     void onEnter() override;
+    std::string EffectNormal::getName() override {
+        return "NORMAL";
+    }
 private:
     TiroCanasta* tiro;
     CanastaManager* basketMgr;

@@ -7,6 +7,11 @@ class EfectoBolaGrande :
 public:
     EfectoBolaGrande(TiroCanasta* tc);
     void onEnter() override;
+    void onExit() override;
+
+    std::string EfectoBolaGrande::getName()override  {
+        return "PELOTA GRANDE";
+    }
 private:
     TiroCanasta* tiro;
 };
